@@ -2,9 +2,6 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
-/**
- * GET route template
- */
 router.get('/:id', (req, res) => {
     // This route will retrieve the specific data for all tasks for the id of the user for use in displaying the tasks parameters to the dashboard
     // console.log('incoming id on params is:', req.params);
@@ -22,14 +19,32 @@ router.get('/:id', (req, res) => {
         })
 });
 
+router.get('/:id', (req, res) => {
+    // This route will retrieve the specific data for the primary tasks for the day for the id of the user for use in displaying on the dashboard
+    // console.log('incoming id on params is:', req.params);
+    const userId = req.params.id
+    const queryText = `
+    SELECT "date", "complete", "long_streak", "current_streak" FROM "primary_task"
+    JOIN "user" ON "user"."id" = "primary_task"."user_id"
+    WHERE "user_id" = $1
+    ORDER BY "date" DESC;`
+    pool.query(queryText, [userId])
+        .then((response) => {
+            res.send(response.rows)
+        }).catch((err) => {
+            console.log(err);
+        })
+});
+
 /**
  * POST route template
  */
 router.post('/', async (req, res) => {
     // This route will be used to create new tasks for a given user. certain fields accept null values.
-    // console.log('incoming id on params is:', req.params);
     const clietn = await pool.connect();
     try {
+        // req.body will contain information on the task, as well as an array of task_specs. single tasks will only have 1 object in the array,
+        // but this code should also be usable for multi-tasks if/when those are implemented
         const {
             name,
             style,
