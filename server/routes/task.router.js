@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/:id', (req, res) => {
   // GET route code here
   console.log('incoming id on params is:', req.params);
-  const userId = req.params
+  const userId = req.params.id
   const queryText = `
   SELECT "name", "style", "icon", "task"."complete", "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete", "long_streak", "current_streak" FROM "task"
   JOIN "task_specs" ON "task_specs"."task_id" = "task"."id"
@@ -16,7 +16,7 @@ router.get('/:id', (req, res) => {
   WHERE "user_id" = $1;`
   pool.query(queryText, [userId])
   .then ((response) => {
-      res.send(response.data)
+      res.send(response.rows)
   }).catch ((err) => {
       console.log(err);
   })
