@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   // GET route code here
   const userID = 1; // TODO: change userID to be equal to Params
-  const queryText = `SELECT "id", "date", "complete" FROM "Day";` 
+  const queryText = `SELECT "id", "date", "complete" FROM "Day" ORDER BY id DESC;` 
   pool.query(queryText)
   .then ((response) => {
     console.log('got some days');
@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 router.get('/check', (req, res) => {
   // GET route code here
   const userID = 1; // TODO: change userID to be equal to Params
-  const queryText = `SELECT "id", "date", "date_day", "complete" FROM "Day" ORDER BY "date" DESC LIMIT 2;` 
+  const queryText = `SELECT "id", "date", "date_day", "complete" FROM "Day" WHERE "date_day" IS NOT NULL ORDER BY "date" DESC LIMIT 2;` 
   pool.query(queryText)
   .then ((response) => {
     console.log(response);
@@ -37,7 +37,7 @@ router.get('/check', (req, res) => {
 router.get('/getdays', (req, res) => {
   // GET route code here
   const userID = 1; // TODO: change userID to be equal to Params
-  const queryText = `SELECT "id", "date", "date_day", "complete" FROM "Day" WHERE "date_day" IS NOT NULL ORDER BY "date" DESC ;` 
+  const queryText = `SELECT "id", "date", "date_day", "complete" FROM "Day" WHERE "date_day" IS NOT NULL ORDER BY "date" ASC ;` 
   pool.query(queryText)
   .then ((response) => {
     console.log(response);
