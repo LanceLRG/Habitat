@@ -7,7 +7,7 @@ router.get('/:id', (req, res) => {
     // console.log('incoming id on params is:', req.params);
     const userId = req.params.id
     const queryText = `
-  SELECT "name", "style", "icon", "task"."complete", "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete", "long_streak", "current_streak" FROM "task"
+  SELECT "task"."id", "name", "style", "icon", "task"."complete", "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete", "long_streak", "current_streak" FROM "task"
   JOIN "task_specs" ON "task_specs"."task_id" = "task"."id"
   JOIN "user" ON "user"."id" = "task"."user_id"
   WHERE "user_id" = $1;`
@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/primary/:id', (req, res) => {
     // This route will retrieve the specific data for the primary tasks for the day for the id of the user for use in displaying on the dashboard
     // console.log('incoming id on params is:', req.params);
     const userId = req.params.id

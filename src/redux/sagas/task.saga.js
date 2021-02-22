@@ -21,6 +21,8 @@ function* fetchPrimary(action) {
     }
 }
 
+//TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
+
 function* taskSaga() {
     yield takeLatest ('FETCH_TASK', fetchTask);
     yield takeLatest ('FETCH_PRIMARY', fetchPrimary);
