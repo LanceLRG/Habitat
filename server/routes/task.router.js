@@ -24,7 +24,7 @@ router.get('/primary/:id', (req, res) => {
     // console.log('incoming id on params is:', req.params);
     const userId = req.params.id
     const queryText = `
-    SELECT "date", "complete", "long_streak", "current_streak" FROM "primary_task"
+    SELECT "primary_task"."id", "date", "complete", "long_streak", "current_streak" FROM "primary_task"
     JOIN "user" ON "user"."id" = "primary_task"."user_id"
     WHERE "user_id" = $1
     ORDER BY "date" DESC;`
@@ -40,8 +40,9 @@ router.get('/primary/:id', (req, res) => {
  * POST route template
  */
 router.post('/', async (req, res) => {
+    console.log('req.body is,', req.body);
     // This route will be used to create new tasks for a given user. certain fields accept null values.
-    const clietn = await pool.connect();
+    const client = await pool.connect();
     try {
         // req.body will contain information on the task, as well as an array of task_specs. single tasks will only have 1 object in the array,
         // but this code should also be usable for multi-tasks if/when those are implemented

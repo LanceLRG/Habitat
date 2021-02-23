@@ -17,7 +17,16 @@ function* fetchPrimary(action) {
         const response = yield axios.get(`/api/task/primary/${action.payload.userId}`)
         yield put ({type: 'SET_PRIMARY_TASK', payload: response.data})
     } catch (error) {
-        console.log((`error GETTING primary task, ${error}`));
+        console.log(`error GETTING primary task, ${error}`);
+    }
+}
+
+function* addTask(action) {
+    try{
+        yield axios.post('/api/task', action.payload)
+        yield put({type: 'FETCH_TASK', payload: {userId: action.payload.user_id}})
+    } catch (error) {
+        console.log(`error POSTING new task, ${error}`);
     }
 }
 
@@ -26,6 +35,7 @@ function* fetchPrimary(action) {
 function* taskSaga() {
     yield takeLatest ('FETCH_TASK', fetchTask);
     yield takeLatest ('FETCH_PRIMARY', fetchPrimary);
+    yield takeLatest ('ADD_TASK', addTask);
 }
 
 export default taskSaga
