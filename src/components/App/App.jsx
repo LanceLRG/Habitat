@@ -19,10 +19,19 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import TaskManage from '../TaskManage/TaskManage';
+
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {fab} from '@fortawesome/free-brands-svg-icons';
+import {fas} from '@fortawesome/free-solid-svg-icons';
+import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import './App.css';
 
 function App() {
+
+  library.add(fab, fas, faCheckSquare, faCoffee)
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -64,6 +73,14 @@ function App() {
             path="/info"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows addTask Page else shows LoginPage
+            exact
+            path="/taskmanage"
+          >
+            <TaskManage />
           </ProtectedRoute>
 
           {/* When a value is supplied for the authRedirect prop the user will
