@@ -30,12 +30,22 @@ function* addTask(action) {
     }
 }
 
+function* completeTask(action) {
+    try{
+        yield axios.put(`/api/task/complete/${action.payload.taskId}`)
+        yield put({type: 'FETCH_TASK', payload: action.payload})
+    } catch (error) {
+        console.log(`error PUTTING task completion, ${error}`);
+    }
+}
+
 //TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
 
 function* taskSaga() {
     yield takeLatest ('FETCH_TASK', fetchTask);
     yield takeLatest ('FETCH_PRIMARY', fetchPrimary);
     yield takeLatest ('ADD_TASK', addTask);
+    yield takeLatest ('COMPLETE_TASK', completeTask);
 }
 
 export default taskSaga

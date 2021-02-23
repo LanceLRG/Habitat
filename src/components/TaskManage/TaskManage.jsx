@@ -35,9 +35,9 @@ function manageTaskPage() {
 
     const submitTask = () => {
         const task_specs = [{
-            amount: amountInput,
-            unit: unitInput,
-            special: specialInput, 
+            amount: (amountInput || null),
+            unit: (unitInput || null),
+            special: (specialInput || null), 
             timer: false,
             timerTime: null,
             stopwatch: false,

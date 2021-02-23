@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import './Dashboard.css';
@@ -13,6 +15,7 @@ function UserPage() {
 
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
+    dispatch({type: 'COMPLETE_TASK', payload: {taskId: taskId, userId: store.user.id} })
   }
 
   useEffect(() => {
@@ -30,10 +33,11 @@ function UserPage() {
       {store.task.map((task) =>  
       <div className="task" key={task.id}>
         <h3>{task.name}</h3>
-        {(task.amount) ? <p>{task.amount}:{task.unit}</p>: ''}
+        <FontAwesomeIcon htmlFor="image" icon={['fas', `${task.icon}`]} size="2x"/>
+        {(task.amount) ? <p>{task.amount}: {task.unit}</p>: ''}
         {(task.special) ? <p>{task.special}</p>: ''}
         <button value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>
-        {(task.complete) ? <p>COMPLETE</p> : <p>NOT COMPLETE</p>}
+        {(task.tcomplete) ? <p>COMPLETE</p> : <p>NOT COMPLETE</p>}
       </div>
       )}
       <br />

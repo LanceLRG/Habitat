@@ -7,7 +7,7 @@ router.get('/:id', (req, res) => {
     // console.log('incoming id on params is:', req.params);
     const userId = req.params.id
     const queryText = `
-  SELECT "task"."id", "name", "style", "icon", "task"."complete", "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete", "long_streak", "current_streak" FROM "task"
+  SELECT "task"."id", "name", "style", "icon", "task"."complete" AS "tcomplete" , "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete" AS "tscomplete" , "long_streak", "current_streak" FROM "task"
   JOIN "task_specs" ON "task_specs"."task_id" = "task"."id"
   JOIN "user" ON "user"."id" = "task"."user_id"
   WHERE "user_id" = $1;`
@@ -79,5 +79,20 @@ router.post('/', async (req, res) => {
         client.release()
     }
 });
+
+router.put('/complete/:id', (req, res) => {
+    const taskId = req.params.id
+    const queryText = `
+    UPDATE "task"
+    SET "complete" = true
+    WHERE "id" = $1`
+    pool.query(queryText, [taskId])
+    .then ((response) => {
+        res.sendStatus(200)
+    }).catch ((err) => {
+        console.log(err);
+    })
+});
+
 
 module.exports = router;
