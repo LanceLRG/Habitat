@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
@@ -84,11 +85,30 @@ router.post('/addprimary', (req, res) => {
     const primaryData = req.body
     const queryText = `
     INSERT INTO "primary_task" ("date", "user_id")
-    VALUES (TO_TIMESTAMP($1/1000), $2);`
-    pool.query(queryText, [primaryData.date, primaryData.userId])
+    VALUES (TO_TIMESTAMP($1), $2);`
+    pool.query(queryText, [primaryData.date/1000, primaryData.userId])
     .then ((response) => {
         res.sendStatus(201)
     }).catch ((err) => {
+        console.log(err);
+    })
+})
+
+router.put('/resettask/:id', (req, res) => {
+    const userId = req.params.id;
+    const queryText1 = `
+    UPDATE "task"
+    SET "complete" = false
+    WHERE user_id = $1;`
+    const queryText2 = `
+    UPDATE "task_specs"
+    SET "complete" = false
+    WHERE user_id = $1;`
+    pool.query(queryText1, [userId])
+    .then (pool.query(queryText2, [userId]))
+    .then ((response) => {
+        res.sendStatus(200)
+    }).catch((err) => {
         console.log(err);
     })
 })
