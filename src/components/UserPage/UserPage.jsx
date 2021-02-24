@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import './Dashboard.css';
 
 function UserPage() {
@@ -13,32 +14,69 @@ function UserPage() {
   const history = useHistory();
   const user = useSelector((store) => store.user);
 
+  // This task runs every time a 'complete' or 'undo' is made.
+  // It will check if the number of 'task-completes' is equal to the number of tasks 
+  // inside the store. If it is (and the day isn't arleady marked 'complete'),
+  // it will send a put request to mark the day (primary task) as 'complete'. 
+  // If it isn't, it will check to see if an 'undo' was made after a day completion.
+  // If the day is marked as 'complete' but there aren't enough 'task-completes'
+  // it will set the day's completion back to false.
+  const calcComplete = () => {
+    let compCount = 0;
+    for (let task of store.task) {
+      if (task.tcomplete) {
+        ++compCount;
+      }
+    }
+    console.log(compCount, store.task.length);
+    if (compCount === Number(store.task.length) && !store.primaryTask.complete) {
+      dispatch({type: 'TOGGLE_DAY', payload: {primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id}})
+    }
+    else if (compCount < Number(store.task.length) && store.primaryTask.complete) {
+      dispatch({type: 'TOGGLE_DAY', payload: {primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id}});
+    }
+    return;
+  }
+
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
-    dispatch({type: 'COMPLETE_TASK', payload: {taskId: taskId, userId: store.user.id} })
+    dispatch({ type: 'COMPLETE_TASK', payload: { taskId: taskId, userId: store.user.id } })
+    calcComplete();
+  }
+
+  const markUndo = (taskId) => {
+    console.log('undoing task with id:', taskId);
+    dispatch({ type: 'UNDO_TASK', payload: { taskId: taskId, userId: store.user.id } })
+    calcComplete();
   }
 
   useEffect(() => {
-    dispatch({type:'FETCH_PRIMARY', payload: {userId: store.user.id}});
-    dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}});
+    dispatch({ type: 'FETCH_PRIMARY', payload: { userId: store.user.id } });
+    dispatch({ type: 'FETCH_TASK', payload: { userId: store.user.id } });
   }, [])
 
   return (
     <div className="container">
+      <div>
+        <button onClick={() => calcComplete()}>Calculate completions</button>
+        <h2>{moment().format('MMMM Do YYYY')}</h2>
+        {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
+      </div>
       <h2>Welcome, {user.username}!</h2>
       {/* <button value={store.user.id} onClick={() => dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}})} >Button</button> */}
       <p>Your ID is: {user.id}</p>
       {/* draws a task for every task in the task reducer conditionally renders elements
           based on whether or not certain elements are setup*/}
-      {store.task.map((task) =>  
-      <div className="task" key={task.id}>
-        <h3>{task.name}</h3>
-        <FontAwesomeIcon htmlFor="image" icon={['fas', `${task.icon}`]} size="2x"/>
-        {(task.amount) ? <p>{task.amount}: {task.unit}</p>: ''}
-        {(task.special) ? <p>{task.special}</p>: ''}
-        <button value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>
-        {(task.tcomplete) ? <p>COMPLETE</p> : <p>NOT COMPLETE</p>}
-      </div>
+      {store.task.map((task) =>
+        <div className="task" key={task.id}>
+          <FontAwesomeIcon htmlFor="image" icon={['fas', 'pen']} size="1x" onClick={() => console.log('hello')} />
+          <h3>{task.name}</h3>
+          <FontAwesomeIcon htmlFor="image" icon={['fas', `${task.icon}`]} size="2x" />
+          {(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
+          {(task.special) ? <p>{task.special}</p> : ''}
+          {(task.tcomplete) ? <button value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
+          {(task.tcomplete) ? <FontAwesomeIcon htmlFor="image" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['far', `circle`]} size="2x" />}
+        </div>
       )}
       <br />
       <br />

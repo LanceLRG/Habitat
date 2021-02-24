@@ -24,13 +24,14 @@ import TaskManage from '../TaskManage/TaskManage';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {fas} from '@fortawesome/free-solid-svg-icons';
+import {far} from '@fortawesome/free-regular-svg-icons'
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import './App.css';
 
 function App() {
 
-  library.add(fab, fas, faCheckSquare, faCoffee)
+  library.add(fab, fas, far, faCheckSquare, faCoffee)
 
   const dispatch = useDispatch();
 
