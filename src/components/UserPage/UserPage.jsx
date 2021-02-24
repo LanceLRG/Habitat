@@ -29,10 +29,10 @@ function UserPage() {
       }
     }
     console.log(compCount, store.task.length);
-    if (compCount === Number(store.task.length) && !store.primaryTask.complete) {
+    if (compCount === store.task.length && !store.primaryTask.complete) {
       dispatch({type: 'TOGGLE_DAY', payload: {primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id}})
     }
-    else if (compCount < Number(store.task.length) && store.primaryTask.complete) {
+    else if (compCount < store.task.length && store.primaryTask.complete) {
       dispatch({type: 'TOGGLE_DAY', payload: {primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id}});
     }
     return;
