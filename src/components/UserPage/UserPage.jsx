@@ -38,6 +38,15 @@ function UserPage() {
     return;
   }
 
+  const checkDay = () => {
+    let record = new Date(store.primaryTask.date)
+    let today = new Date();
+    console.log(store.primaryTask);
+    if ((today.setHours(0,0,0,0) - record.setHours(0,0,0,0)) > 86401000 ){
+      console.log('That day was before today! by', (today.setHours(0,0,0,0)- record.setHours(0,0,0,0)) );
+  }
+  }
+
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
     dispatch({ type: 'COMPLETE_TASK', payload: { taskId: taskId, userId: store.user.id } })
@@ -59,6 +68,7 @@ function UserPage() {
     <div className="container">
       <div>
         <button onClick={() => calcComplete()}>Calculate completions</button>
+        <button onClick={() => checkDay()}>Check Day</button>
         <h2>{moment().format('MMMM Do YYYY')}</h2>
         {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
       </div>

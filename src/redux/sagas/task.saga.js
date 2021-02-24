@@ -15,9 +15,24 @@ function* fetchTask(action) {
 function* fetchPrimary(action) {
     try {
         const response = yield axios.get(`/api/task/primary/${action.payload.userId}`)
-        yield put({ type: 'SET_PRIMARY_TASK', payload: response.data })
+        const record = new Date(response.data[0].date);
+        const today = new Date();
+        //TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
+        if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000) {
+            yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId:action.payload.userId }})
+        }
+        yield put({ type: 'SET_PRIMARY_TASK', payload:response.data })
     } catch (error) {
         console.log(`error GETTING primary task, ${error}`);
+    }
+}
+
+function* addPrimary(action) {
+    try {
+        yield axios.post('/api/task/addprimary', action.payload)
+        yield put({type: 'FETCH_PRIMARY', payload: action.payload.userId})
+    } catch (error) {
+        console.log(`error POSTING primarey task, ${error}`);
     }
 }
 
@@ -58,7 +73,6 @@ function* toggleDay(action) {
     }
 }
 
-//TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
 
 function* taskSaga() {
     yield takeLatest('FETCH_TASK', fetchTask);
@@ -67,6 +81,7 @@ function* taskSaga() {
     yield takeLatest('COMPLETE_TASK', completeTask);
     yield takeLatest('UNDO_TASK', undoTask);
     yield takeLatest('TOGGLE_DAY', toggleDay);
+    yield takeLatest('ADD_PRIMARY', addPrimary);
 }
 
 export default taskSaga

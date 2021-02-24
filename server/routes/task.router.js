@@ -80,6 +80,19 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.post('/addprimary', (req, res) => {
+    const primaryData = req.body
+    const queryText = `
+    INSERT INTO "primary_task" ("date", "user_id")
+    VALUES (TO_TIMESTAMP($1/1000), $2);`
+    pool.query(queryText, [primaryData.date, primaryData.userId])
+    .then ((response) => {
+        res.sendStatus(201)
+    }).catch ((err) => {
+        console.log(err);
+    })
+})
+
 router.put('/complete/:id', (req, res) => {
     const taskId = req.params.id
     const queryText = `
