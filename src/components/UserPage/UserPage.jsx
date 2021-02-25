@@ -35,7 +35,12 @@ function UserPage() {
     else if (compCount < store.task.length && store.primaryTask.complete) {
       dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } });
     }
-    return;
+  }
+
+  const calcStreak = () => {
+    if (store.primaryTask.current_streak > store.primaryTask.long_streak){
+      dispatch({type: 'RAISE_LONGEST_STREAK', payload: {newStreak: store.primaryTask.current_streak, userId: store.user.id}})
+    }
   }
 
 
@@ -54,13 +59,11 @@ function UserPage() {
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
     dispatch({ type: 'COMPLETE_TASK', payload: { taskId: taskId, userId: store.user.id } })
-    calcComplete();
   }
 
   const markUndo = (taskId) => {
     console.log('undoing task with id:', taskId);
     dispatch({ type: 'UNDO_TASK', payload: { taskId: taskId, userId: store.user.id } })
-    calcComplete();
   }
 
   const handleEdit = (taskId) => {
@@ -78,6 +81,10 @@ function UserPage() {
     calcComplete();
   }, [store.task])
 
+  useEffect(() => {
+    calcStreak();
+  }, [store.primaryTask])
+
   return (
     <div className="container">
       <div>
@@ -85,6 +92,10 @@ function UserPage() {
         <button onClick={() => checkDay()}>Check Day</button>
         <h2>{moment().format('MMMM Do YYYY')}</h2>
         {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
+        <div>
+          Current Streak: {store.primaryTask.current_streak}
+          Longest Streak: {(store.primaryTask.long_streak)}
+        </div>
       </div>
       <h2>Welcome, {user.username}!</h2>
       {/* <button value={store.user.id} onClick={() => dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}})} >Button</button> */}

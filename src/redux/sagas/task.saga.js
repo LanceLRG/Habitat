@@ -20,6 +20,9 @@ function* fetchPrimary(action) {
         const today = new Date();
         //TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
         if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000 || response.data[0].date === undefined) {
+            if (response.data[0].complete === false){
+                yield put({type: 'BREAK_STREAK'})
+            }
             //add a new day
             yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId:action.payload.userId }})
             //resets user's tasks back to incomplete
@@ -105,6 +108,15 @@ function* toggleDay(action) {
     }
 }
 
+function* raiseLongest(action) {
+    try{
+        yield axios.put('/api/task/raise', action.payload)
+        yield put({type: 'FETCH_PRIMARY', payload: action.payload})
+    } catch (error) {
+        console.log(`error PUTTING for raise longest, ${error}`);
+    }
+}
+
 
 function* taskSaga() {
     yield takeLatest('FETCH_TASK', fetchTask);
@@ -117,6 +129,7 @@ function* taskSaga() {
     yield takeLatest('FETCH_EDIT', fetchEdit);
     yield takeLatest('EDIT_TASK', editTask);
     yield takeLatest('DELETE_TASK', deleteTask);
+    yield takeLatest('RAISE_LONGEST_STREAK', raiseLongest);
 }
 
 export default taskSaga

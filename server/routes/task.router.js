@@ -204,16 +204,16 @@ router.put('/toggle', (req, res) => {
     const ptInfo = req.body;
     let queryText2 = ''
     //checks the incoming status of the prime completion and will increment or decrement the streak by 1
-    if (ptInfo.primeComp) {
-        queryText2 = `
-        UPDATE "user"
-        SET "current_streak" = ("current_streak" + 1)
-        WHERE "id" = $1`
-    }
-    else {
+    if (ptInfo.primeComp === true) {
         queryText2 = `
         UPDATE "user"
         SET "current_streak" = ("current_streak" - 1)
+        WHERE "id" = $1`
+    }
+    else if (ptInfo.primeComp === false){
+        queryText2 = `
+        UPDATE "user"
+        SET "current_streak" = ("current_streak" + 1)
         WHERE "id" = $1`
     }
     const queryText1 = `
@@ -245,6 +245,22 @@ router.delete('/:id', (req, res) => {
         }).catch((err) => {
             console.log(err);
         })
+})
+
+router.put('/raise', (req, res) => {
+    console.log('reqbody is', req.body);
+    const userId = req.body.userId
+    const newStreak = req.body.newStreak
+    const queryText = `
+    UPDATE "user"
+    SET "long_streak" = $1
+    WHERE "id" = $2`
+    pool.query(queryText,[newStreak, userId])
+    .then ((response) => {
+        res.sendStatus(200)
+    }).catch ((err) => {
+        console.log(err);
+    })
 })
 
 
