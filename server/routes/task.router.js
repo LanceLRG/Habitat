@@ -200,12 +200,28 @@ router.put('/edit/', async (req, res) => {
 });
 
 router.put('/toggle', (req, res) => {
+    const userId = req.user.id;
     const ptInfo = req.body;
-    const queryText = `
+    let queryText2 = ''
+    //checks the incoming status of the prime completion and will increment or decrement the streak by 1
+    if (ptInfo.primeComp) {
+        queryText2 = `
+        UPDATE "user"
+        SET "current_streak" = ("current_streak" + 1)
+        WHERE "id" = $1`
+    }
+    else {
+        queryText2 = `
+        UPDATE "user"
+        SET "current_streak" = ("current_streak" - 1)
+        WHERE "id" = $1`
+    }
+    const queryText1 = `
     UPDATE "primary_task"
     SET "complete" = $1
     WHERE "id" = $2;`
-    pool.query(queryText, [!ptInfo.primeComp, ptInfo.primeTaskId])
+    pool.query(queryText1, [!ptInfo.primeComp, ptInfo.primeTaskId])
+        .then(pool.query(queryText2, [userId]))
         .then((response) => {
             res.sendStatus(200)
         }).catch((err) => {

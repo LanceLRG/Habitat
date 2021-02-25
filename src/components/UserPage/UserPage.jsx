@@ -38,6 +38,7 @@ function UserPage() {
     return;
   }
 
+
   const checkDay = () => {
     let record = new Date(store.primaryTask.date)
     let today = new Date();
@@ -72,6 +73,10 @@ function UserPage() {
     dispatch({ type: 'FETCH_PRIMARY', payload: { userId: store.user.id } });
     dispatch({ type: 'FETCH_TASK', payload: { userId: store.user.id } });
   }, [])
+
+  useEffect(() => {
+    calcComplete();
+  }, [store.task[0].complete])
 
   return (
     <div className="container">
