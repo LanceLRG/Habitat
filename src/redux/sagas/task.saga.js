@@ -67,6 +67,16 @@ function* undoTask(action) {
     }
 }
 
+function* editTask(action) {
+    try{
+        console.log(action.payload);
+        const response = yield axios.get(`/api/task/edit/${action.payload}`)
+        yield put({type: 'SET_EDIT', payload: response.data})
+    } catch (error) {
+        console.log(`error GETTING task for edit, ${error}`);
+    }
+}
+
 //submits a POST to the given day to the opposite of the completion status it was given, then refreshes the primary task store
 function* toggleDay(action) {
     try {
@@ -86,6 +96,7 @@ function* taskSaga() {
     yield takeLatest('UNDO_TASK', undoTask);
     yield takeLatest('TOGGLE_DAY', toggleDay);
     yield takeLatest('ADD_PRIMARY', addPrimary);
+    yield takeLatest('EDIT_TASK', editTask);
 }
 
 export default taskSaga

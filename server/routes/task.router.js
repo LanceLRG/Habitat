@@ -37,6 +37,21 @@ router.get('/primary/:id', (req, res) => {
         })
 });
 
+//selects the info that can be edited from a specific task
+router.get('/edit/:id', (req, res) => {
+    const taskId = req.params.id;
+    const queryText = `
+    SELECT "task"."id", "name", "style", "icon", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time" FROM "task"
+    JOIN "task_specs" ON "task_specs"."task_id" = "task"."id"
+    WHERE "task"."id" = $1;`
+    pool.query(queryText, [taskId])
+        .then((response) => {
+            res.send(response.rows)
+        }).catch((err) => {
+            console.log(err);
+        })
+})
+
 /**
  * POST route template
  */
@@ -86,12 +101,12 @@ router.post('/addprimary', (req, res) => {
     const queryText = `
     INSERT INTO "primary_task" ("date", "user_id")
     VALUES (TO_TIMESTAMP($1), $2);`
-    pool.query(queryText, [primaryData.date/1000, primaryData.userId])
-    .then ((response) => {
-        res.sendStatus(201)
-    }).catch ((err) => {
-        console.log(err);
-    })
+    pool.query(queryText, [primaryData.date / 1000, primaryData.userId])
+        .then((response) => {
+            res.sendStatus(201)
+        }).catch((err) => {
+            console.log(err);
+        })
 })
 
 router.put('/resettask/:id', (req, res) => {
@@ -105,12 +120,12 @@ router.put('/resettask/:id', (req, res) => {
     SET "complete" = false
     WHERE user_id = $1;`
     pool.query(queryText1, [userId])
-    .then (pool.query(queryText2, [userId]))
-    .then ((response) => {
-        res.sendStatus(200)
-    }).catch((err) => {
-        console.log(err);
-    })
+        .then(pool.query(queryText2, [userId]))
+        .then((response) => {
+            res.sendStatus(200)
+        }).catch((err) => {
+            console.log(err);
+        })
 })
 
 router.put('/complete/:id', (req, res) => {
@@ -191,11 +206,11 @@ router.put('/toggle', (req, res) => {
     SET "complete" = $1
     WHERE "id" = $2;`
     pool.query(queryText, [!ptInfo.primeComp, ptInfo.primeTaskId])
-    .then ((response) => {
-        res.sendStatus(200)
-    }).catch ((err) => {
-        console.log(err);
-    })
+        .then((response) => {
+            res.sendStatus(200)
+        }).catch((err) => {
+            console.log(err);
+        })
 });
 
 

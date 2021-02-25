@@ -30,10 +30,10 @@ function UserPage() {
     }
     console.log(compCount, store.task.length);
     if (compCount === store.task.length && !store.primaryTask.complete) {
-      dispatch({type: 'TOGGLE_DAY', payload: {primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id}})
+      dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } })
     }
     else if (compCount < store.task.length && store.primaryTask.complete) {
-      dispatch({type: 'TOGGLE_DAY', payload: {primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id}});
+      dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } });
     }
     return;
   }
@@ -42,9 +42,12 @@ function UserPage() {
     let record = new Date(store.primaryTask.date)
     let today = new Date();
     console.log(store.primaryTask);
-    if ((today.setHours(0,0,0,0) - record.setHours(0,0,0,0)) > 86401000 ){
-      console.log('That day was before today! by', (today.setHours(0,0,0,0)- record.setHours(0,0,0,0)) );
-  }
+    if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) > 86401000) {
+      console.log('That day was before today! by', (today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)));
+    }
+    else {
+      console.log('that day is today!')
+    }
   }
 
   const markComplete = (taskId) => {
@@ -57,6 +60,12 @@ function UserPage() {
     console.log('undoing task with id:', taskId);
     dispatch({ type: 'UNDO_TASK', payload: { taskId: taskId, userId: store.user.id } })
     calcComplete();
+  }
+
+  const handleEdit = (taskId) => {
+    console.log('edit task with id,', taskId);
+   dispatch({type: 'EDIT_TASK', payload: taskId})
+   history.push('/taskmanage');
   }
 
   useEffect(() => {
@@ -79,7 +88,8 @@ function UserPage() {
           based on whether or not certain elements are setup*/}
       {store.task.map((task) =>
         <div className="task" key={task.id}>
-          <FontAwesomeIcon htmlFor="image" icon={['fas', 'pen']} size="1x" onClick={() => console.log('hello')} />
+          <button value={task.id} onClick={(e) => handleEdit(e.target.value)}>Edit</button>
+          <FontAwesomeIcon htmlFor="image" icon={['fas', 'pen']} size="1x" value={task.id} onClick={(e) => handleEdit(e.target.value)} />
           <h3>{task.name}</h3>
           <FontAwesomeIcon htmlFor="image" icon={['fas', `${task.icon}`]} size="2x" />
           {(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
