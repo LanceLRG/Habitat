@@ -11,7 +11,6 @@ import moment from 'moment';
 
 function manageTaskPage() {
 
-    const edit = useSelector(store => store.edit)
     const store = useSelector(store => store)
     const dispatch = useDispatch();
     const history = useHistory();
@@ -25,24 +24,24 @@ function manageTaskPage() {
     const [specialInput, setSpecialInput] = useState('');
 
     const fillIn = () => {
-        if (store.edit.name) {
+        if (store.edit.id) {
             setStyleInput(store.edit.style);
             setNameInput(store.edit.name);
             setIconInput(store.edit.icon);
             setAmountInput(store.edit.amount || '');
             setUnitInput(store.edit.unit || '');
-            if (store.edit.special){
+            if (store.edit.special) {
                 setSpecialToggle(true);
                 setSpecialInput(store.edit.special);
             }
         }
     }
-    
-    useEffect(()=> {
-        fillIn();
-    },[])
 
-    const submitTask = () => {
+    useEffect(() => {
+        fillIn();
+    }, [])
+
+    const submitTask = (command) => {
         const task_specs = [{
             amount: (amountInput || null),
             unit: (unitInput || null),
@@ -53,6 +52,7 @@ function manageTaskPage() {
             stopwatchTime: null,
         }]
         const newTask = {
+            id: (store.edit.id || ''),
             style: styleInput,
             name: nameInput,
             icon: iconInput,
@@ -61,8 +61,20 @@ function manageTaskPage() {
             primary_id: store.primaryTask.id,
             task_specs
         }
-        console.log('newTask is', newTask);
-        dispatch({ type: 'ADD_TASK', payload: newTask })
+        if (command === 'add') {
+            console.log('newTask is', newTask);
+            dispatch({ type: 'ADD_TASK', payload: newTask })
+            history.push('/home')
+        }
+        else if (command === 'edit') {
+            console.log('editing task');
+            dispatch({type: 'EDIT_TASK', payload: newTask})
+            history.push('/home')
+        }
+    }
+
+    const handleDelete = (taskId) => {
+        dispatch({type: 'DELETE_TASK', payload: taskId})
         history.push('/home')
     }
 
@@ -71,11 +83,12 @@ function manageTaskPage() {
         history.push('/home')
     }
 
+
     return (
         <>
             <div className="taskstyle">
                 <button onClick={fillIn}>fill In</button>
-                {(store.edit.name) ? <p>got somethin' {store.edit.name}</p> : <p>nothing to edit {store.edit.id}</p>}
+                {(store.edit.id) ? <p>got somethin' {store.edit.id}</p> : <p>nothing to edit {store.edit.id}</p>}
                 <h2>Task Style</h2>
                 <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
                 <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label>
@@ -156,7 +169,8 @@ function manageTaskPage() {
                 {moment().format()}
             </div>
             <button onClick={abortTask}>Cancel</button>
-            <button onClick={submitTask}>Submit</button>
+            {(store.edit.id) ? <button onClick={() => submitTask('edit')}>Submit Changes</button> : <button onClick={() => submitTask('add')}>Add Task</button>}
+            {(store.edit.id) ? <button onClick={() => handleDelete(store.edit.id)}>Delete</button> : ''}
         </>
     );
 }

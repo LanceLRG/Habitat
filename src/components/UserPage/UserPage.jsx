@@ -64,7 +64,7 @@ function UserPage() {
 
   const handleEdit = (taskId) => {
     console.log('edit task with id,', taskId);
-   dispatch({type: 'EDIT_TASK', payload: taskId})
+   dispatch({type: 'FETCH_EDIT', payload: taskId})
    history.push('/taskmanage');
   }
 

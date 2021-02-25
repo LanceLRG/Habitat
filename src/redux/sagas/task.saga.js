@@ -67,13 +67,31 @@ function* undoTask(action) {
     }
 }
 
-function* editTask(action) {
+function* fetchEdit(action) {
     try{
         console.log(action.payload);
         const response = yield axios.get(`/api/task/edit/${action.payload}`)
         yield put({type: 'SET_EDIT', payload: response.data})
     } catch (error) {
         console.log(`error GETTING task for edit, ${error}`);
+    }
+}
+
+function* editTask(action) {
+    try{
+        yield axios.put(`/api/task/edit`, action.payload)
+        yield put({type: 'FETCH_TASK'})
+    } catch (error) {
+        console.log(`error PUTTING task edit, ${error}`);
+    }
+}
+
+function* deleteTask(action) {
+    try{
+        yield axios.delete(`/api/task/${action.payload}`)
+        yield put({type: 'FETCH_TASK'})
+    } catch (error) {
+        console.log(`error DELETING task, ${error}`);
     }
 }
 
@@ -96,7 +114,9 @@ function* taskSaga() {
     yield takeLatest('UNDO_TASK', undoTask);
     yield takeLatest('TOGGLE_DAY', toggleDay);
     yield takeLatest('ADD_PRIMARY', addPrimary);
+    yield takeLatest('FETCH_EDIT', fetchEdit);
     yield takeLatest('EDIT_TASK', editTask);
+    yield takeLatest('DELETE_TASK', deleteTask);
 }
 
 export default taskSaga

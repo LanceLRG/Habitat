@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/:id', (req, res) => {
     // This route will retrieve the specific data for all tasks for the id of the user for use in displaying the tasks parameters to the dashboard
     // console.log('incoming id on params is:', req.params);
-    const userId = req.params.id
+    const userId = req.user.id
     const queryText = `
     SELECT "task"."id", "name", "style", "icon", "task"."complete" AS "tcomplete" , "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete" AS "tscomplete" , "long_streak", "current_streak" FROM "task"
     JOIN "task_specs" ON "task_specs"."task_id" = "task"."id"
@@ -157,12 +157,13 @@ router.put('/undo/:id', (req, res) => {
         })
 });
 
-router.put('/edit/:id', async (req, res) => {
+router.put('/edit/', async (req, res) => {
     const client = await pool.connect();
     try {
         // req.body will contain information on the task, as well as an array of task_specs. single tasks will only have 1 object in the array,
         // but this code should also be usable for multi-tasks if/when those are implemented
         const {
+            id,
             name,
             style,
             icon,
@@ -170,21 +171,20 @@ router.put('/edit/:id', async (req, res) => {
             user_id,        //these were needed only for creation and are not used here
             primary_id,     //these were needed only for creation and are not used here
             task_specs
-        } = req.body
-        const taskId = req.params.id;
+        } = req.body;
         await client.query('BEGIN')
-        const taskInsertResults = await client.query(`
+        await client.query(`
         UPDATE "task" 
          SET "name"=$1, "style"=$2, "icon"=$3
         WHERE "id"=$4
-        RETURNING id;`, [name, style, icon, taskId]);
+        RETURNING id;`, [name, style, icon, id]);
 
         await Promise.all(task_specs.map(spec => {
             const insertTaskSpecText = `
         UPDATE "task_specs" 
-        SET "amount"=$1, "unit"=$2, "special"=$3, "timer"=$4, "timer_time"=$5 "stopwatch"=$6
+        SET "amount"=$1, "unit"=$2, "special"=$3, "timer"=$4, "timer_time"=$5, "stopwatch"=$6
         WHERE "task_id"=$7`;
-            const insertTaskSpecValues = [spec.amount, spec.unit, spec.special, spec.timer, spec.timerTime, spec.stopwatch, taskId];
+            const insertTaskSpecValues = [spec.amount, spec.unit, spec.special, spec.timer, spec.timerTime, spec.stopwatch, id];
             return client.query(insertTaskSpecText, insertTaskSpecValues);
         }));
 
@@ -212,6 +212,24 @@ router.put('/toggle', (req, res) => {
             console.log(err);
         })
 });
+
+router.delete('/:id', (req, res) => {
+    const taskId = req.params.id
+    console.log('taskId for delete is,', taskId);
+    const queryText1 = `
+    DELETE FROM "task"
+    WHERE "id" = $1;`
+    const queryText2 = `
+    DELETE FROM "task_specs"
+    WHERE "task_id" = $1;`
+    pool.query(queryText2, [taskId])
+        .then(pool.query(queryText1, [taskId]))
+        .then((response) => {
+            res.sendStatus(204)
+        }).catch((err) => {
+            console.log(err);
+        })
+})
 
 
 module.exports = router;
