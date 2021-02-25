@@ -39,7 +39,7 @@ function manageTaskPage() {
 
     useEffect(() => {
         fillIn();
-    }, [])
+    }, [store.edit])
 
     const submitTask = (command) => {
         const task_specs = [{

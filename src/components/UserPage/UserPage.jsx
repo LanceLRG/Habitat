@@ -76,7 +76,7 @@ function UserPage() {
 
   useEffect(() => {
     calcComplete();
-  }, [store.task[0].complete])
+  }, [store.task])
 
   return (
     <div className="container">
