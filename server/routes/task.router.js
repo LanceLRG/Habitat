@@ -14,7 +14,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     SELECT "task"."id", "name", "style", "icon", "task"."complete" AS "tcomplete" , "date_created", "primary_id", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_specs"."complete" AS "tscomplete" , "long_streak", "current_streak" FROM "task"
     JOIN "task_specs" ON "task_specs"."task_id" = "task"."id"
     JOIN "user" ON "user"."id" = "task"."user_id"
-    WHERE "user_id" = $1;`
+    WHERE "task"."user_id" = $1;`
     pool.query(queryText, [userId])
         .then((response) => {
             res.send(response.rows)
@@ -82,9 +82,9 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
         const newTaskId = taskInsertResults.rows[0].id;
 
         await Promise.all(task_specs.map(spec => {
-            const insertTaskSpecText = `INSERT INTO "task_specs" ("amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_id")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
-            const insertTaskSpecValues = [spec.amount, spec.unit, spec.special, spec.timer, spec.timerTime, spec.stopwatch, spec.stopwatchTime, newTaskId];
+            const insertTaskSpecText = `INSERT INTO "task_specs" ("amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time", "task_id", "user_id")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+            const insertTaskSpecValues = [spec.amount, spec.unit, spec.special, spec.timer, spec.timerTime, spec.stopwatch, spec.stopwatchTime, newTaskId, user_id];
             return client.query(insertTaskSpecText, insertTaskSpecValues);
         }));
 
@@ -101,10 +101,11 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
 
 router.post('/addprimary', rejectUnauthenticated, (req, res) => {
     const primaryData = req.body
+    const userId = req.user.id
     const queryText = `
     INSERT INTO "primary_task" ("date", "user_id")
     VALUES (TO_TIMESTAMP($1), $2);`
-    pool.query(queryText, [primaryData.date / 1000, primaryData.userId])
+    pool.query(queryText, [primaryData.date / 1000, userId])
         .then((response) => {
             res.sendStatus(201)
         }).catch((err) => {

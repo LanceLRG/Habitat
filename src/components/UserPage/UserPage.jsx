@@ -23,6 +23,10 @@ function UserPage() {
   // it will set the day's completion back to false.
   const calcComplete = () => {
     let compCount = 0;
+    //no free streaks if you have no tasks
+    if (store.task.length <= 0){
+      return;
+    }
     for (let task of store.task) {
       if (task.tcomplete) {
         ++compCount;
