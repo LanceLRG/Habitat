@@ -2,8 +2,11 @@ const { response } = require('express');
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const {
+    rejectUnauthenticated,
+} = require ('../modules/authentication-middleware');
 
-router.get('/:id', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
     // This route will retrieve the specific data for all tasks for the id of the user for use in displaying the tasks parameters to the dashboard
     // console.log('incoming id on params is:', req.params);
     const userId = req.user.id
@@ -20,10 +23,10 @@ router.get('/:id', (req, res) => {
         })
 });
 
-router.get('/primary/:id', (req, res) => {
+router.get('/primary/', rejectUnauthenticated, (req, res) => {
     // This route will retrieve the specific data for the primary tasks for the day for the id of the user for use in displaying on the dashboard
     // console.log('incoming id on params is:', req.params);
-    const userId = req.params.id
+    const userId = req.user.id
     const queryText = `
     SELECT "primary_task"."id", "date", "complete", "long_streak", "current_streak" FROM "primary_task"
     JOIN "user" ON "user"."id" = "primary_task"."user_id"
@@ -38,7 +41,7 @@ router.get('/primary/:id', (req, res) => {
 });
 
 //selects the info that can be edited from a specific task
-router.get('/edit/:id', (req, res) => {
+router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     const taskId = req.params.id;
     const queryText = `
     SELECT "task"."id", "name", "style", "icon", "amount", "unit", "special", "timer", "timer_time", "stopwatch", "stopwatch_time" FROM "task"
@@ -55,7 +58,7 @@ router.get('/edit/:id', (req, res) => {
 /**
  * POST route template
  */
-router.post('/', async (req, res) => {
+router.post('/', rejectUnauthenticated, async (req, res) => {
     console.log('req.body is,', req.body);
     // This route will be used to create new tasks for a given user. certain fields accept null values.
     const client = await pool.connect();
@@ -96,7 +99,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.post('/addprimary', (req, res) => {
+router.post('/addprimary', rejectUnauthenticated, (req, res) => {
     const primaryData = req.body
     const queryText = `
     INSERT INTO "primary_task" ("date", "user_id")
@@ -109,8 +112,8 @@ router.post('/addprimary', (req, res) => {
         })
 })
 
-router.put('/resettask/:id', (req, res) => {
-    const userId = req.params.id;
+router.put('/resettask/', rejectUnauthenticated, (req, res) => {
+    const userId = req.user.id;
     const queryText1 = `
     UPDATE "task"
     SET "complete" = false
@@ -128,7 +131,7 @@ router.put('/resettask/:id', (req, res) => {
         })
 })
 
-router.put('/complete/:id', (req, res) => {
+router.put('/complete/:id', rejectUnauthenticated, (req, res) => {
     const taskId = req.params.id
     const queryText = `
     UPDATE "task"
@@ -142,7 +145,7 @@ router.put('/complete/:id', (req, res) => {
         })
 });
 
-router.put('/undo/:id', (req, res) => {
+router.put('/undo/:id', rejectUnauthenticated, (req, res) => {
     console.log('undoing task with id of', req.params.id);
     const taskId = req.params.id
     const queryText = `
@@ -157,7 +160,7 @@ router.put('/undo/:id', (req, res) => {
         })
 });
 
-router.put('/edit/', async (req, res) => {
+router.put('/edit/', rejectUnauthenticated, async (req, res) => {
     const client = await pool.connect();
     try {
         // req.body will contain information on the task, as well as an array of task_specs. single tasks will only have 1 object in the array,
@@ -199,7 +202,7 @@ router.put('/edit/', async (req, res) => {
     }
 });
 
-router.put('/toggle', (req, res) => {
+router.put('/toggle', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const ptInfo = req.body;
     let queryText2 = ''
@@ -229,7 +232,7 @@ router.put('/toggle', (req, res) => {
         })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
     const taskId = req.params.id
     console.log('taskId for delete is,', taskId);
     const queryText1 = `
@@ -247,7 +250,7 @@ router.delete('/:id', (req, res) => {
         })
 })
 
-router.put('/raise', (req, res) => {
+router.put('/raise', rejectUnauthenticated, (req, res) => {
     console.log('reqbody is', req.body);
     const userId = req.body.userId;
     const newStreak = req.body.newStreak;
@@ -263,14 +266,14 @@ router.put('/raise', (req, res) => {
     })
 })
 
-router.put('/break', (req,res) => {
+router.put('/break', rejectUnauthenticated, (req,res) => {
     console.log('resetting streak');
     const userId = req.user.id;
     const queryText = `
     UPDATE "user"
     SET "current_streak" = 0
     WHERE "id" = $1`
-    pool.query(queryText,[req.user.id])
+    pool.query(queryText,[userId])
     .then ((response) => {
         res.sendStatus(200)
     }).catch ((err) => {

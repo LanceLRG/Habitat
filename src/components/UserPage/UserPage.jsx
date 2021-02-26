@@ -81,8 +81,8 @@ function UserPage() {
   }
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_PRIMARY', payload: { userId: store.user.id } });
-    dispatch({ type: 'FETCH_TASK', payload: { userId: store.user.id } });
+    dispatch({ type: 'FETCH_PRIMARY'});
+    dispatch({ type: 'FETCH_TASK'});
   }, [])
 
   useEffect(() => {

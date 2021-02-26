@@ -5,7 +5,7 @@ import axios from 'axios';
 // all the tasks the user associate with that id has, and places them into the task reducer
 function* fetchTask(action) {
     try {
-        const response = yield axios.get(`/api/task/${action.payload.userId}`)
+        const response = yield axios.get(`/api/task/`)
         yield put({ type: 'SET_TASK', payload: response.data })
     } catch (error) {
         console.log(`error GETTING tasks, ${error}`);
@@ -15,18 +15,18 @@ function* fetchTask(action) {
 function* fetchPrimary(action) {
     try {
         // gets all the days the user has on record
-        const response = yield axios.get(`/api/task/primary/${action.payload.userId}`)
+        const response = yield axios.get(`/api/task/primary/`)
         const today = new Date();
         const record = new Date(response.data[0].date);
         //TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
         if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000 || !response.data) {
             if (response.data[0].complete === false){
-                yield axios.put('/api/task/break', action.payload.userId)
+                yield axios.put('/api/task/break')
             }
             //add a new day
-            yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId:action.payload.userId }})
+            yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0)}})
             //resets user's tasks back to incomplete
-            yield axios.put(`/api/task/resettask/${action.payload.userId}`)
+            yield axios.put(`/api/task/resettask/`)
         }
         yield put({ type: 'SET_PRIMARY_TASK', payload:response.data })
     } catch (error) {
@@ -37,7 +37,7 @@ function* fetchPrimary(action) {
 function* addPrimary(action) {
     try {
         yield axios.post('/api/task/addprimary', action.payload)
-        yield put({type: 'FETCH_PRIMARY', payload: action.payload.userId})
+        yield put({type: 'FETCH_PRIMARY'})
     } catch (error) {
         console.log(`error POSTING primarey task, ${error}`);
     }
@@ -46,7 +46,7 @@ function* addPrimary(action) {
 function* addTask(action) {
     try {
         yield axios.post('/api/task', action.payload)
-        yield put({ type: 'FETCH_TASK', payload: { userId: action.payload.user_id } })
+        yield put({ type: 'FETCH_TASK'})
     } catch (error) {
         console.log(`error POSTING new task, ${error}`);
     }
@@ -55,7 +55,7 @@ function* addTask(action) {
 function* completeTask(action) {
     try {
         yield axios.put(`/api/task/complete/${action.payload.taskId}`)
-        yield put({ type: 'FETCH_TASK', payload: action.payload })
+        yield put({ type: 'FETCH_TASK'})
     } catch (error) {
         console.log(`error PUTTING task completion, ${error}`);
     }
@@ -64,7 +64,7 @@ function* completeTask(action) {
 function* undoTask(action) {
     try {
         yield axios.put(`/api/task/undo/${action.payload.taskId}`)
-        yield put({ type: 'FETCH_TASK', payload: action.payload })
+        yield put({ type: 'FETCH_TASK'})
     } catch (error) {
         console.log(`error PUTTING task undo, ${error}`);
     }
