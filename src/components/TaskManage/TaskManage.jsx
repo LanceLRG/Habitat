@@ -39,7 +39,7 @@ function manageTaskPage() {
 
     useEffect(() => {
         fillIn();
-    }, [])
+    }, [store.edit])
 
     const submitTask = (command) => {
         const task_specs = [{
@@ -102,9 +102,11 @@ function manageTaskPage() {
                 <h3>Image</h3>
                 <FontAwesomeIcon value={iconInput} icon={['fas', `${iconInput}`]} size="5x" />
             </div>
+            {/*TODO: set the determined radio to be ticked for an edit */}
             <div>
                 <p>choose an icon:</p>
-                <input type="radio" value="coffee" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
+                {console.log(typeof(iconInput))}
+                <input type="radio" value="coffee" defaultChecked={(iconInput === "coffee") ? true : false} name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
                 <FontAwesomeIcon htmlFor="coffee" icon={['fas', `coffee`]} size="2x" />
                 <input type="radio" value="image" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
                 <FontAwesomeIcon htmlFor="image" icon={['fas', `image`]} size="2x" />
@@ -164,7 +166,7 @@ function manageTaskPage() {
                 <h3>Specifications</h3>
                 <label htmlFor="amount">Amount:</label><input type="text" name="amount" placeholder="ex: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
                 <label htmlFor="unit">Unit:</label><input type="text" name="unit" placeholder="ex: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
-                <input type="checkbox" id="special" onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
+                <input type="checkbox" id="special" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
                 {/* <button onClick={() => addSpecs()} >accept specifications</button> */}
                 {moment().format()}
             </div>
