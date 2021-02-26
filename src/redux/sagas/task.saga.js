@@ -16,12 +16,12 @@ function* fetchPrimary(action) {
     try {
         // gets all the days the user has on record
         const response = yield axios.get(`/api/task/primary/${action.payload.userId}`)
-        const record = new Date(response.data[0].date);
         const today = new Date();
+        const record = new Date(response.data[0].date);
         //TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
-        if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000 || response.data[0].date === undefined) {
+        if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000 || !response.data) {
             if (response.data[0].complete === false){
-                yield put({type: 'BREAK_STREAK'})
+                yield axios.put('/api/task/break', action.payload.userId)
             }
             //add a new day
             yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId:action.payload.userId }})

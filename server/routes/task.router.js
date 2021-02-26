@@ -249,13 +249,28 @@ router.delete('/:id', (req, res) => {
 
 router.put('/raise', (req, res) => {
     console.log('reqbody is', req.body);
-    const userId = req.body.userId
-    const newStreak = req.body.newStreak
+    const userId = req.body.userId;
+    const newStreak = req.body.newStreak;
     const queryText = `
     UPDATE "user"
     SET "long_streak" = $1
-    WHERE "id" = $2`
+    WHERE "id" = $2`;
     pool.query(queryText,[newStreak, userId])
+    .then ((response) => {
+        res.sendStatus(200)
+    }).catch ((err) => {
+        console.log(err);
+    })
+})
+
+router.put('/break', (req,res) => {
+    console.log('resetting streak');
+    const userId = req.user.id;
+    const queryText = `
+    UPDATE "user"
+    SET "current_streak" = 0
+    WHERE "id" = $1`
+    pool.query(queryText,[req.user.id])
     .then ((response) => {
         res.sendStatus(200)
     }).catch ((err) => {

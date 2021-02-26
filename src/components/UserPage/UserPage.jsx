@@ -38,8 +38,16 @@ function UserPage() {
   }
 
   const calcStreak = () => {
-    if (store.primaryTask.current_streak > store.primaryTask.long_streak){
-      dispatch({type: 'RAISE_LONGEST_STREAK', payload: {newStreak: store.primaryTask.current_streak, userId: store.user.id}})
+    if (store.primaryTask.current_streak > store.primaryTask.long_streak) {
+      dispatch({ type: 'RAISE_LONGEST_STREAK', payload: { newStreak: store.primaryTask.current_streak, userId: store.user.id } })
+    }
+  }
+
+  // make this a button or something somewhere that only a user with nothing in their primary task store will fire, and only once for that user
+  const makeFirstDay = () => {
+    if (Object.keys(store.primaryTask).length === 0 ) {
+      const today = new Date();
+      dispatch({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId: store.user.id } })
     }
   }
 
@@ -68,8 +76,8 @@ function UserPage() {
 
   const handleEdit = (taskId) => {
     console.log('edit task with id,', taskId);
-   dispatch({type: 'FETCH_EDIT', payload: taskId})
-   history.push('/taskmanage');
+    dispatch({ type: 'FETCH_EDIT', payload: taskId })
+    history.push('/taskmanage');
   }
 
   useEffect(() => {
