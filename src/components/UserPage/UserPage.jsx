@@ -23,16 +23,17 @@ function UserPage() {
   // it will set the day's completion back to false.
   const calcComplete = () => {
     let compCount = 0;
-    //no free streaks if you have no tasks
-    if (store.task.length <= 0){
-      return;
-    }
+
     for (let task of store.task) {
       if (task.tcomplete) {
         ++compCount;
       }
     }
     console.log(compCount, store.task.length);
+        //no free streaks if you have no tasks
+        if (store.task.length <= 0){
+          return;
+        }
     if (compCount === store.task.length && !store.primaryTask.complete) {
       dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } })
     }
