@@ -29,6 +29,7 @@ function* fetchPrimary(action) {
             yield axios.put(`/api/task/resettask/`)
         }
         yield put({ type: 'SET_PRIMARY_TASK', payload:response.data })
+        yield put({ type: 'SET_PRIMARY_HISTORY', payload:response.data })
     } catch (error) {
         console.log(`error GETTING primary task, ${error}`);
     }

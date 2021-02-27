@@ -68,18 +68,20 @@ function manageTaskPage() {
         }
         else if (command === 'edit') {
             console.log('editing task');
-            dispatch({type: 'EDIT_TASK', payload: newTask})
+            dispatch({ type: 'EDIT_TASK', payload: newTask })
             history.push('/home')
         }
     }
 
     const handleDelete = (taskId) => {
-        dispatch({type: 'DELETE_TASK', payload: taskId})
+        dispatch({ type: 'DELETE_TASK', payload: taskId })
         history.push('/home')
     }
 
     const abortTask = () => {
-        dispatch({ type: 'UNSET_EDIT' })
+        if (store.edit.id) {
+            dispatch({ type: 'UNSET_EDIT' })
+        }
         history.push('/home')
     }
 
@@ -105,7 +107,7 @@ function manageTaskPage() {
             {/*TODO: set the determined radio to be ticked for an edit */}
             <div>
                 <p>choose an icon:</p>
-                {console.log(typeof(iconInput))}
+                {console.log(typeof (iconInput))}
                 <input type="radio" value="coffee" defaultChecked={(iconInput === "coffee") ? true : false} name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
                 <FontAwesomeIcon htmlFor="coffee" icon={['fas', `coffee`]} size="2x" />
                 <input type="radio" value="image" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />

@@ -20,6 +20,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import TaskManage from '../TaskManage/TaskManage';
+import Calendar from '../Calendar/Calendar';
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {fab} from '@fortawesome/free-brands-svg-icons';
@@ -82,6 +83,14 @@ function App() {
             path="/taskmanage"
           >
             <TaskManage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows addTask Page else shows LoginPage
+            exact
+            path="/calendar"
+          >
+            <Calendar />
           </ProtectedRoute>
 
           {/* When a value is supplied for the authRedirect prop the user will

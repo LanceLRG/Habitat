@@ -103,6 +103,7 @@ function UserPage() {
       <div>
         <button onClick={() => calcComplete()}>Calculate completions</button>
         <button onClick={() => checkDay()}>Check Day</button>
+        <button onClick={() => history.push('/calendar')}>Calendar</button>
         <h2>{moment().format('MMMM Do YYYY')}</h2>
         {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
         <div>
