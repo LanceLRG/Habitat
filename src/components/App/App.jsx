@@ -28,6 +28,9 @@ import {fas} from '@fortawesome/free-solid-svg-icons';
 import {far} from '@fortawesome/free-regular-svg-icons'
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 import './App.css';
 
 function App() {

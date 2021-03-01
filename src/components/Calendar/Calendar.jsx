@@ -27,16 +27,12 @@ function Calendar() {
 
     const isLeapYear = (year) => {
             if(year % 400 === 0) {
-                (console.log(`it is a leap year!`))
                 return true;
             } else if (year % 100 === 0) {
-                (console.log(`it is NOT a leap year!`))
                 return false;
             } else if (year % 4 === 0) {
-                (console.log(`it is a leap year!`))
                 return true;
             } else {
-                (console.log(`it is NOT a leap year!`))
                 return false;
             }
         }
@@ -540,7 +536,7 @@ function Calendar() {
             <button onClick={()=>{setYear(Number(year)+1)}}>{">"}</button>
             {/* {everyDayTable} */}
             {renderDay(jan, 'January')}
-            {renderDay(feb, 'February')}{(isLeapYear(year) === true) && <div className={`February 29 ${year}`}>29</div>}
+            {renderDay(feb, 'February')}{(isLeapYear(year)) && <div className={`February 29 ${year}`}>29</div>}
             {renderDay(mar, 'March')}
             {renderDay(apr, 'April')}
             {renderDay(may, 'May')}

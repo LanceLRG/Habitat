@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
@@ -6,6 +6,9 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import './Dashboard.css';
+
+import Card from 'react-bootstrap/Card';
+import ProgressBar from 'react-bootstrap/ProgressBar'
 
 function UserPage() {
 
@@ -21,6 +24,7 @@ function UserPage() {
   // If it isn't, it will check to see if an 'undo' was made after a day completion.
   // If the day is marked as 'complete' but there aren't enough 'task-completes'
   // it will set the day's completion back to false.
+  const [percent, setPercent] = useState(0);
   const calcComplete = () => {
     let compCount = 0;
 
@@ -28,12 +32,13 @@ function UserPage() {
       if (task.tcomplete) {
         ++compCount;
       }
+      setPercent((compCount / store.task.length)*100)
     }
     console.log(compCount, store.task.length);
-        //no free streaks if you have no tasks
-        if (store.task.length <= 0){
-          return;
-        }
+    //no free streaks if you have no tasks
+    if (store.task.length <= 0) {
+      return;
+    }
     if (compCount === store.task.length && !store.primaryTask.complete) {
       dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } })
     }
@@ -50,7 +55,7 @@ function UserPage() {
 
   // make this a button or something somewhere that only a user with nothing in their primary task store will fire, and only once for that user
   const makeFirstDay = () => {
-    if (Object.keys(store.primaryTask).length === 0 ) {
+    if (Object.keys(store.primaryTask).length === 0) {
       const today = new Date();
       dispatch({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId: store.user.id } })
     }
@@ -86,8 +91,8 @@ function UserPage() {
   }
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_PRIMARY'});
-    dispatch({ type: 'FETCH_TASK'});
+    dispatch({ type: 'FETCH_PRIMARY' });
+    dispatch({ type: 'FETCH_TASK' });
   }, [])
 
   useEffect(() => {
@@ -104,12 +109,15 @@ function UserPage() {
         <button onClick={() => calcComplete()}>Calculate completions</button>
         <button onClick={() => checkDay()}>Check Day</button>
         <button onClick={() => history.push('/calendar')}>Calendar</button>
-        <h2>{moment().format('MMMM Do YYYY')}</h2>
-        {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
-        <div>
-          Current Streak: {store.primaryTask.current_streak}
-          Longest Streak: {(store.primaryTask.long_streak)}
-        </div>
+        <Card style={{ width: '100%' }}>
+          <h1 class="card-header font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
+          <Card.Body>
+            {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
+            <Card.Text>Current Streak: {store.primaryTask.current_streak}</Card.Text>
+            {/* <Card.Text>Longest Streak: {(store.primaryTask.long_streak)}</Card.Text> */}
+            <ProgressBar variant="info" now={percent} />
+          </Card.Body>
+        </Card>
       </div>
       <h2>Welcome, {user.username}!</h2>
       {/* <button value={store.user.id} onClick={() => dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}})} >Button</button> */}
