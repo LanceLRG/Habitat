@@ -1,4 +1,11 @@
-.task {
-    border: 1px solid black;
-    display: inline-block;
+.header{
+    position: absolute;
+    right:1%;
+    bottom:40%
+}
+
+#star{
+    position: absolute;
+    right:1%;
+    top:4%;
 }

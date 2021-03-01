@@ -110,10 +110,13 @@ function UserPage() {
         <button onClick={() => checkDay()}>Check Day</button>
         <button onClick={() => history.push('/calendar')}>Calendar</button>
         <Card style={{ width: '100%' }}>
-          <h1 class="card-header font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
+          <Card.Header>
+          <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
+          <h5 class="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
+          {(store.primaryTask.complete) ? <FontAwesomeIcon id="star" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon id="star" icon={['fas', `star`]} opacity=".2" size="2x" />}
+          </Card.Header>
           <Card.Body>
-            {(store.primaryTask.complete) ? <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['fas', `star`]} opacity=".2" size="2x" />}
-            <Card.Text>Current Streak: {store.primaryTask.current_streak}</Card.Text>
+            
             {/* <Card.Text>Longest Streak: {(store.primaryTask.long_streak)}</Card.Text> */}
             <ProgressBar variant="info" now={percent} />
           </Card.Body>
@@ -125,16 +128,18 @@ function UserPage() {
       {/* draws a task for every task in the task reducer conditionally renders elements
           based on whether or not certain elements are setup*/}
       {store.task.map((task) =>
+      <Card style={{ width: '100%' }}>
         <div className="task" key={task.id}>
           <button value={task.id} onClick={(e) => handleEdit(e.target.value)}>Edit</button>
           <FontAwesomeIcon htmlFor="image" icon={['fas', 'pen']} size="1x" value={task.id} onClick={(e) => handleEdit(e.target.value)} />
-          <h3>{task.name}</h3>
+          <h3 class="card-title">{task.name}</h3>
           <FontAwesomeIcon htmlFor="image" icon={['fas', `${task.icon}`]} size="2x" />
           {(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
           {(task.special) ? <p>{task.special}</p> : ''}
           {(task.tcomplete) ? <button value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
           {(task.tcomplete) ? <FontAwesomeIcon htmlFor="image" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['far', `circle`]} size="2x" />}
         </div>
+        </Card>
       )}
       <br />
       <br />
