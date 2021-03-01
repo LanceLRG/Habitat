@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import './Dashboard.css';
 
 import Card from 'react-bootstrap/Card';
-import ProgressBar from 'react-bootstrap/ProgressBar'
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 function UserPage() {
 
@@ -32,7 +32,7 @@ function UserPage() {
       if (task.tcomplete) {
         ++compCount;
       }
-      setPercent((compCount / store.task.length)*100)
+      setPercent((compCount / store.task.length) * 100)
     }
     console.log(compCount, store.task.length);
     //no free streaks if you have no tasks
@@ -111,12 +111,11 @@ function UserPage() {
         <button onClick={() => history.push('/calendar')}>Calendar</button>
         <Card style={{ width: '100%' }}>
           <Card.Header>
-          <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
-          <h5 class="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
-          {(store.primaryTask.complete) ? <FontAwesomeIcon id="star" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon id="star" icon={['fas', `star`]} opacity=".2" size="2x" />}
+            <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
+            <h5 class="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
+            {(store.primaryTask.complete) ? <FontAwesomeIcon id="star" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon id="star" icon={['fas', `star`]} opacity=".2" size="2x" />}
           </Card.Header>
           <Card.Body>
-            
             {/* <Card.Text>Longest Streak: {(store.primaryTask.long_streak)}</Card.Text> */}
             <ProgressBar variant="info" now={percent} />
           </Card.Body>
@@ -128,17 +127,20 @@ function UserPage() {
       {/* draws a task for every task in the task reducer conditionally renders elements
           based on whether or not certain elements are setup*/}
       {store.task.map((task) =>
-      <Card style={{ width: '100%' }}>
-        <div className="task" key={task.id}>
-          <button value={task.id} onClick={(e) => handleEdit(e.target.value)}>Edit</button>
-          <FontAwesomeIcon htmlFor="image" icon={['fas', 'pen']} size="1x" value={task.id} onClick={(e) => handleEdit(e.target.value)} />
-          <h3 class="card-title">{task.name}</h3>
-          <FontAwesomeIcon htmlFor="image" icon={['fas', `${task.icon}`]} size="2x" />
-          {(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
-          {(task.special) ? <p>{task.special}</p> : ''}
-          {(task.tcomplete) ? <button value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
-          {(task.tcomplete) ? <FontAwesomeIcon htmlFor="image" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon htmlFor="image" icon={['far', `circle`]} size="2x" />}
-        </div>
+        <Card  style={{ width: '100%', margin: '10px' }}>
+          <div className="task" key={task.id}>
+            <Card.Header>
+            <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
+              <h3 className="task-name">{task.name}</h3>
+              
+              <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
+              {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
+              {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
+            </Card.Header>
+            <Card.Body>{(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
+              {(task.special) ? <p>{task.special}</p> : ''}
+            </Card.Body>
+          </div>
         </Card>
       )}
       <br />
