@@ -1,0 +1,13 @@
+.scrollme{
+    height: 150px;
+    overflow-y: scroll;
+    border-radius: 5px;
+}
+
+.icon-select{
+    display: inline-block;
+    padding: 7px;
+    margin: 3px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}

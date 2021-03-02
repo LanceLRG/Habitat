@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // This saga will recieve the id of the user logged in and send out a GET request to retrieve 
 // all the tasks the user associate with that id has, and places them into the task reducer
-function* fetchTask(action) {
+function* fetchTask() {
     try {
         const response = yield axios.get(`/api/task/`)
         yield put({ type: 'SET_TASK', payload: response.data })
@@ -12,7 +12,7 @@ function* fetchTask(action) {
     }
 }
 
-function* fetchPrimary(action) {
+function* fetchPrimary() {
     try {
         // gets all the days the user has on record
         const response = yield axios.get(`/api/task/primary/`)
@@ -31,6 +31,7 @@ function* fetchPrimary(action) {
             yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0)}})
             //resets user's tasks back to incomplete
             yield axios.put(`/api/task/resettask/`)
+            yield ({type: 'FETCH_TASK'})
         }
         yield put({ type: 'SET_PRIMARY_TASK', payload:response.data })
         yield put({ type: 'SET_PRIMARY_HISTORY', payload:response.data })

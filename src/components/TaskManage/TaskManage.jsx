@@ -4,6 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 
+import './TaskManage.css';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
+
 // This is one of our simplest components
 // It doesn't have local state
 // It doesn't dispatch any redux actions or display any part of redux state
@@ -85,96 +94,76 @@ function manageTaskPage() {
         history.push('/home')
     }
 
-
+    const iconList = ['coffee', 'image', 'dumbbell', 'bicycle', `book-reader`, `book`, `brain`, `capsules`, `code`, `dollar-sign`, `dungeon`, `fist-raised`, `gamepad`, `globe`, `graduation-cap`, `guitar`, `hamburger`, `headphones-alt`, `hiking`, `home`, `music`,
+        `language`, `hard-hat`, `dice`, `file-invoice-dollar`, `utensils`, `images`]
     return (
         <>
-            <div className="taskstyle">
-                <button onClick={fillIn}>fill In</button>
-                {(store.edit.id) ? <p>got somethin' {store.edit.id}</p> : <p>nothing to edit {store.edit.id}</p>}
-                <h2>Task Style</h2>
-                <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
-                <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label>
-                <hr />
-            </div>
-            <div>
-                <h2>Task Design</h2>
-                <input type="text" placeholder="Task Name" value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
-            </div>
-            <div>
-                <h3>Image</h3>
-                <FontAwesomeIcon value={iconInput} icon={['fas', `${iconInput}`]} size="5x" />
-            </div>
-            {/*TODO: set the determined radio to be ticked for an edit */}
-            <div>
-                <p>choose an icon:</p>
-                {console.log(typeof (iconInput))}
-                <input type="radio" value="coffee" defaultChecked={(iconInput === "coffee") ? true : false} name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="coffee" icon={['fas', `coffee`]} size="2x" />
-                <input type="radio" value="image" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="image" icon={['fas', `image`]} size="2x" />
-                <input type="radio" value="dumbbell" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="dumbbell" icon={['fas', `dumbbell`]} size="2x" />
-                <input type="radio" value="bicycle" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="bicycle" icon={['fas', `bicycle`]} size="2x" />
-                <input type="radio" value="book-reader" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="book-reader" icon={['fas', `book-reader`]} size="2x" />
-                <input type="radio" value="book" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="book" icon={['fas', `book`]} size="2x" />
-                <input type="radio" value="brain" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="brain" icon={['fas', `brain`]} size="2x" />
-                <input type="radio" value="capsules" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="capsules" icon={['fas', `capsules`]} size="2x" />
-                <input type="radio" value="code" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="code" icon={['fas', `code`]} size="2x" />
-                <input type="radio" value="dollar-sign" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="dollar-sign" icon={['fas', `dollar-sign`]} size="2x" />
-                <input type="radio" value="dungeon" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="dungeon" icon={['fas', `dungeon`]} size="2x" />
-                <input type="radio" value="fist-raised" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="fist-raised" icon={['fas', `fist-raised`]} size="2x" />
-                <input type="radio" value="gamepad" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="gamepad" icon={['fas', `gamepad`]} size="2x" />
-                <input type="radio" value="globe" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="globe" icon={['fas', `globe`]} size="2x" />
-                <input type="radio" value="graduation-cap" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="graduation-cap" icon={['fas', `graduation-cap`]} size="2x" />
-                <input type="radio" value="guitar" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="guitar" icon={['fas', `guitar`]} size="2x" />
-                <input type="radio" value="hamburger" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="hamburger" icon={['fas', `hamburger`]} size="2x" />
-                <input type="radio" value="headphones-alt" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="headphones-alt" icon={['fas', `headphones-alt`]} size="2x" />
-                <input type="radio" value="hiking" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="hiking" icon={['fas', `hiking`]} size="2x" />
-                <input type="radio" value="home" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="home" icon={['fas', `home`]} size="2x" />
-                <input type="radio" value="music" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="music" icon={['fas', `music`]} size="2x" />
-                <input type="radio" value="language" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="language" icon={['fas', `language`]} size="2x" />
-                <input type="radio" value="hard-hat" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="hard-hat" icon={['fas', `hard-hat`]} size="2x" />
-                <input type="radio" value="dice" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="dice" icon={['fas', `dice`]} size="2x" />
-                <input type="radio" value="file-invoice-dollar" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="file-invoice-dollar" icon={['fas', `file-invoice-dollar`]} size="2x" />
-                <input type="radio" value="utensils" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="utensils" icon={['fas', `utensils`]} size="2x" />
-                <input type="radio" value="images" name="iconSelect" onClick={(e) => setIconInput(e.target.value)} />
-                <FontAwesomeIcon htmlFor="images" icon={['fas', `images`]} size="2x" />
-                <hr />
-            </div>
-            <div>
-                <h3>Specifications</h3>
-                <label htmlFor="amount">Amount:</label><input type="text" name="amount" placeholder="ex: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
-                <label htmlFor="unit">Unit:</label><input type="text" name="unit" placeholder="ex: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
-                <input type="checkbox" id="special" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
-                {/* <button onClick={() => addSpecs()} >accept specifications</button> */}
-                {moment().format()}
-            </div>
-            <button onClick={abortTask}>Cancel</button>
-            {(store.edit.id) ? <button onClick={() => submitTask('edit')}>Submit Changes</button> : <button onClick={() => submitTask('add')}>Add Task</button>}
-            {(store.edit.id) ? <button onClick={() => handleDelete(store.edit.id)}>Delete</button> : ''}
+            <Container>
+                <Form>
+                    <Form.Group as={Row}>
+                        <Form.Label as="legend" column="lg" lg={2}>Task Style</Form.Label>
+                        <Col sm={3}>
+                            <Form.Check
+                                type="radio"
+                                label="Single"
+                                name="formHorizontalRadios"
+                                id="formHorizontalRadios1"
+                                value="single"
+                                defaultChecked
+                                onClick={() => setStyleInput('single')}
+                            />
+                            <Form.Check
+                                type="radio"
+                                label="Multiple"
+                                name="formHorizontalRadios"
+                                id="formHorizontalRadios2"
+                                value="multiple"
+                                onClick={() => setStyleInput('multiple')}
+                            />
+                        </Col>
+                        <br />
+                        <Col>
+                            <p>Single tasks require only one action to be completed.</p>
+                            <p> Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
+                        </p>
+                        </Col>
+                        {/* <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
+                        <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label> */}
+                    </Form.Group>
+                    <hr />
+                    <h2>Task Design</h2>
+                    <Form.Group>
+                        <input type="text" placeholder="Task Name" value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
+                        <h3>Image</h3>
+                        <FontAwesomeIcon value={iconInput} icon={['fas', `${iconInput}`]} size="5x" />
+                        {/*TODO: set the determined radio to be ticked for an edit */}
+                        <div class="overflow-auto">
+                            <p>choose an icon:</p>
+                            {/* {console.log(typeof (iconInput))} */}
+                            <div class="scrollme p-3 mb-3 mb-md-0 mr-md-3 bg-light">
+                                {iconList.map((name) => (
+                                    <div className="icon-select">
+                                        {/* <Form.Check inline value={name} type="radio" name="iconSelect" id={`inline-radio-1`} onClick={(e) => setIconInput(e.target.value)} /> */}
+                                        <FontAwesomeIcon htmlFor={name}  icon={['fas', `${name}`]} size="2x" onClick={() => setIconInput(name)}/>
+                                    </div>
+                                ))}
+                            </div>
+                            <hr />
+                        </div>
+                    </Form.Group>
+                    <div>
+                        <h3>Specifications</h3>
+                        <label htmlFor="amount">Amount:</label><input type="text" name="amount" placeholder="ex: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
+                        <label htmlFor="unit">Unit:</label><input type="text" name="unit" placeholder="ex: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
+                        <input type="checkbox" id="special" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
+                        {/* <button onClick={() => addSpecs()} >accept specifications</button> */}
+                        {moment().format()}
+                    </div>
+                    <button onClick={abortTask}>Cancel</button>
+                    {(store.edit.id) ? <button onClick={() => submitTask('edit')}>Submit Changes</button> : <button onClick={() => submitTask('add')}>Add Task</button>}
+                    {(store.edit.id) ? <button onClick={() => handleDelete(store.edit.id)}>Delete</button> : ''}
+                </Form>
+            </Container>
         </>
     );
 }

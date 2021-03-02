@@ -21,6 +21,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import TaskManage from '../TaskManage/TaskManage';
 import Calendar from '../Calendar/Calendar';
+import Sidebar from '../Sidebar/Sidebar';
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {fab} from '@fortawesome/free-brands-svg-icons';
@@ -29,6 +30,7 @@ import {far} from '@fortawesome/free-regular-svg-icons'
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 import './App.css';
@@ -47,6 +49,7 @@ function App() {
     <Router>
       <div>
         <Nav />
+        {/* <Sidebar /> */}
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
@@ -89,7 +92,7 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute
-            // logged in shows addTask Page else shows LoginPage
+            // logged in shows Calendar Page else shows LoginPage
             exact
             path="/calendar"
           >

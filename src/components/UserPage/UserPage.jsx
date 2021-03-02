@@ -9,6 +9,8 @@ import './Dashboard.css';
 
 import Card from 'react-bootstrap/Card';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 
 function UserPage() {
 
@@ -92,14 +94,15 @@ function UserPage() {
 
   useEffect(() => {
     calcStreak();
+    calcComplete();
   }, [store.primaryTask])
 
   return (
     <div className="container">
       <div>
-        <button onClick={() => calcComplete()}>Calculate completions</button>
+        {/* <button onClick={() => calcComplete()}>Calculate completions</button>
         <button onClick={() => checkDay()}>Check Day</button>
-        <button onClick={() => history.push('/calendar')}>Calendar</button>
+        <button onClick={() => history.push('/calendar')}>Calendar</button> */}
         <Card style={{ width: '100%' }}>
           <Card.Header>
             <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
@@ -123,8 +126,9 @@ function UserPage() {
             <Card.Header>
             <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
               <h3 className="task-name">{task.name}</h3>
-              
+              <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
               <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
+              </OverlayTrigger>
               {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
               {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
             </Card.Header>
