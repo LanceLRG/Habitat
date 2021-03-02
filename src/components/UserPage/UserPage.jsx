@@ -9,7 +9,6 @@ import './Dashboard.css';
 
 import Card from 'react-bootstrap/Card';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import Button from 'react-bootstrap/Button';
 
 function UserPage() {
 
@@ -149,7 +148,7 @@ function UserPage() {
       <button className="btn btn-block btn-outline-primary" onClick={() => history.push('/taskmanage')}>Add task</button>
       <br />
       <br />
-      <Button className="btn">Log Out</Button>
+      <LogOutButton />
     </div>
   );
 }

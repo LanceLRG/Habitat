@@ -1,0 +1,16 @@
+#year-bar{
+display: inline-flex;
+margin:auto;
+}
+
+#year-bar button{
+    margin-left: 10px;
+    margin-right: 10px;
+    border: none;
+    background: none;
+}
+
+.date{
+    text-align: center;
+    margin: auto;
+}
