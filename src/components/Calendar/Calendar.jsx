@@ -30,6 +30,8 @@ function Calendar() {
     let d = new Date();
     const [year, setYear] = useState(d.getFullYear())
 
+
+
     const isLeapYear = (year) => {
         if (year % 400 === 0) {
             return true;
@@ -42,7 +44,16 @@ function Calendar() {
         }
     }
 
-    const renderDay = (month, monthName) => month.map((day) => <div className={`date ${monthName} ${day} ${year}`}>{day}</div>)
+    const renderDay = (month, monthNum, monthName) => month.map((day) => {
+    
+        let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="2x" />;
+    // for (let date of store.primaryHistory) {
+    //     if((moment(date.date).format('l') === `${monthNum}/${day}/${year}`) && date.complete){
+    //         star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity="1" color="gold" size="2x" />;
+    //     }
+    // };
+    return(
+    <div className={`date ${monthName} ${day} ${year}`}>{day}{star}</div>)})
 
     const checkCompletion = () => {
         if (store.primaryHistory[0]) {
@@ -77,53 +88,53 @@ function Calendar() {
                 </Row>
                 <Row className="justify-content-md-center">
                     {/* <h2>jan feb mar apr may jun jul aug sep oct nov dev</h2> */}
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>jan</h4>
-                        {renderDay(jan, 'January')}
+                        {renderDay(jan, 1, 'January')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>feb</h4>
-                        {renderDay(feb, 'February')}{(isLeapYear(year)) && <div className={`February 29 ${year}`}>29</div>}
+                        {renderDay(feb, 2, 'February')}{(isLeapYear(year)) && <div className={`date February 29 ${year}`}>29</div>}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>mar</h4>
-                        {renderDay(mar, 'March')}
+                        {renderDay(mar, 3, 'March')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>apr</h4>
-                        {renderDay(apr, 'April')}
+                        {renderDay(apr, 4, 'April')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>may</h4>
-                        {renderDay(may, 'May')}
+                        {renderDay(may, 5, 'May')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>jun</h4>
-                        {renderDay(jun, 'June')}
+                        {renderDay(jun, 6, 'June')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>jul</h4>
-                        {renderDay(jul, 'July')}
+                        {renderDay(jul, 7, 'July')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>aug</h4>
-                        {renderDay(aug, 'August')}
+                        {renderDay(aug, 8, 'August')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>sep</h4>
-                        {renderDay(sep, 'September')}
+                        {renderDay(sep, 9, 'September')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>oct</h4>
-                        {renderDay(oct, 'October')}
+                        {renderDay(oct, 10, 'October')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>nov</h4>
-                        {renderDay(nov, 'November')}
+                        {renderDay(nov, 11, 'November')}
                     </Col>
-                    <Col xs="auto">
+                    <Col xs={"auto"}>
                         <h4>dec</h4>
-                        {renderDay(dec, 'December')}
+                        {renderDay(dec, 12, 'December')}
                     </Col>
                 </Row>
             </Container>

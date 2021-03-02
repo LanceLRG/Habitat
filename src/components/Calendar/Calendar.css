@@ -4,13 +4,26 @@ margin:auto;
 }
 
 #year-bar button{
+    opacity: 0.3;
     margin-left: 10px;
     margin-right: 10px;
     border: none;
     background: none;
 }
 
+#year-bar button:hover{
+    transition: 0.3s;
+    opacity: 1;
+}
+
 .date{
     text-align: center;
+    justify-content: center;
+    margin: auto;
+    padding-bottom: 2px;
+}
+
+.star{
+    position: relative;
     margin: auto;
 }
