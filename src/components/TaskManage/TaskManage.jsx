@@ -130,38 +130,51 @@ function manageTaskPage() {
                         {/* <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
                         <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label> */}
                     </Form.Group>
-                    <hr />
-                    <h2>Task Design</h2>
-                    <Form.Group>
-                        <input type="text" placeholder="Task Name" value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
-                        <h3>Image</h3>
-                        <FontAwesomeIcon value={iconInput} icon={['fas', `${iconInput}`]} size="5x" />
-                        {/*TODO: set the determined radio to be ticked for an edit */}
-                        <div class="overflow-auto">
-                            <p>choose an icon:</p>
-                            {/* {console.log(typeof (iconInput))} */}
-                            <div class="scrollme p-3 mb-3 mb-md-0 mr-md-3 bg-light">
-                                {iconList.map((name) => (
-                                    <div className="icon-select">
-                                        {/* <Form.Check inline value={name} type="radio" name="iconSelect" id={`inline-radio-1`} onClick={(e) => setIconInput(e.target.value)} /> */}
-                                        <FontAwesomeIcon htmlFor={name}  icon={['fas', `${name}`]} size="2x" onClick={() => setIconInput(name)}/>
-                                    </div>
-                                ))}
+                    <div className="p-3 mb-3 mb-md-0 mr-md-3 bg-light">
+                        <h2>Task Design</h2>
+                        <hr />
+                        <br />
+                        <Form.Group controlId="formTaskDesign">
+                            <Form.Row>
+                                <Col md="auto" id="exIcon">
+                                    <FontAwesomeIcon value={iconInput} icon={['fas', `${iconInput}`]} size="5x" />
+                                </Col>
+                                <Col md={9}>
+                                    <Form.Label>Task Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Task Name" value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
+                                    <Form.Text className="text-muted">
+                                        Choose something specific like "reading" or "exercising"
+                        </Form.Text>
+                                </Col>
+
+                            </Form.Row>
+                            {/*TODO: set the determined radio to be ticked for an edit */}
+                            <div className="p-3 mb-3 mb-md-0 mr-md-3 bg-light">
+                                {/* {console.log(typeof (iconInput))} */}
+                                <Form.Label as="legend" column="md" md={2}>choose an icon:</Form.Label>
+                                <div className="scrollme p-3 mb-3 mb-md-0 mr-md-3 bg-light">
+                                    {iconList.map((name) => (
+                                        <div className="icon-select" onClick={() => setIconInput(name)}>
+                                            {/* <Form.Check inline value={name} type="radio" name="iconSelect" id={`inline-radio-1`} onClick={(e) => setIconInput(e.target.value)} /> */}
+                                            <FontAwesomeIcon htmlFor={name} icon={['fas', `${name}`]} size="3x" />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            <hr />
+                        </Form.Group>
+                        <hr />
+                        <div>
+                            <h3>Specifications</h3>
+                            <label htmlFor="amount">Amount:</label><input type="text" name="amount" placeholder="ex: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
+                            <label htmlFor="unit">Unit:</label><input type="text" name="unit" placeholder="ex: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
+                            <input type="checkbox" id="special" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
+                            {/* <button onClick={() => addSpecs()} >accept specifications</button> */}
+                            {moment().format()}
                         </div>
-                    </Form.Group>
-                    <div>
-                        <h3>Specifications</h3>
-                        <label htmlFor="amount">Amount:</label><input type="text" name="amount" placeholder="ex: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
-                        <label htmlFor="unit">Unit:</label><input type="text" name="unit" placeholder="ex: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
-                        <input type="checkbox" id="special" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
-                        {/* <button onClick={() => addSpecs()} >accept specifications</button> */}
-                        {moment().format()}
+                        <button onClick={abortTask}>Cancel</button>
+                        {(store.edit.id) ? <button onClick={() => submitTask('edit')}>Submit Changes</button> : <button onClick={() => submitTask('add')}>Add Task</button>}
+                        {(store.edit.id) ? <button onClick={() => handleDelete(store.edit.id)}>Delete</button> : ''}
                     </div>
-                    <button onClick={abortTask}>Cancel</button>
-                    {(store.edit.id) ? <button onClick={() => submitTask('edit')}>Submit Changes</button> : <button onClick={() => submitTask('add')}>Add Task</button>}
-                    {(store.edit.id) ? <button onClick={() => handleDelete(store.edit.id)}>Delete</button> : ''}
                 </Form>
             </Container>
         </>

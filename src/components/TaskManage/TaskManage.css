@@ -1,13 +1,24 @@
 .scrollme{
-    height: 150px;
+    border:gray 1px solid;
+    height: 200px;
     overflow-y: scroll;
     border-radius: 5px;
 }
 
 .icon-select{
+    transition: .3s;
     display: inline-block;
     padding: 7px;
     margin: 3px;
     border: 1px solid gray;
     border-radius: 5px;
+}
+
+.icon-select:hover{
+    background: rgb(224, 224, 224);
+    transition: .3s;
+}
+
+#exIcon{
+    margin:auto;
 }
