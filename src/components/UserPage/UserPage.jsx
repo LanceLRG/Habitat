@@ -53,15 +53,6 @@ function UserPage() {
     }
   }
 
-  // make this a button or something somewhere that only a user with nothing in their primary task store will fire, and only once for that user
-  const makeFirstDay = () => {
-    if (Object.keys(store.primaryTask).length === 0) {
-      const today = new Date();
-      dispatch({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0), userId: store.user.id } })
-    }
-  }
-
-
   const checkDay = () => {
     let record = new Date(store.primaryTask.date)
     let today = new Date();
