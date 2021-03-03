@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoePrints } from '@fortawesome/free-solid-svg-icons';
 import './Calendar.css';
 
 import Container from 'react-bootstrap/Container';
@@ -26,7 +25,6 @@ function Calendar() {
     const nov = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
     const dec = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 
-    let onDay = [];
     let d = new Date();
     const [year, setYear] = useState(d.getFullYear())
 
@@ -48,96 +46,79 @@ function Calendar() {
 
     const renderDay = (month, monthNum, monthName) => month.map((day) => {
     
-        let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="2x" />;
+        let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="1x" />;
         
-    // for (let date of store.primaryHistory) {
-    //     if((moment(date.date).format('l') === `${monthNum}/${day}/${year}`) && date.complete){
-    //         star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="2x" />;
-    //     }
-    // };
-    return(
-    <div className={`date ${monthName} ${day} ${year}`}>{day}{star}</div>)})
-
-    const checkCompletion = () => {
-        if (store.primaryHistory[0]) {
-            for (let primary of store.primaryHistory) {
-                if (primary.complete) {
-                    console.log(moment(primary.date).format('l'));
-                    onDay.push(moment(primary.date).format('l'));
-                }
-            }
-            console.log(onDay);
+    for (let entry of store.primaryHistory) {
+        if((moment(entry.date).format('l') === `${monthNum}/${day}/${year}`) && entry.complete){
+            star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="1x" />;
         }
-    }
+    };
+
+    return(
+    <div className={`date`}>{day}{star}</div>)})
+
     useEffect(() => {
         dispatch({ type: 'FETCH_PRIMARY' });
     }, [])
-
-    useEffect(() => {
-        checkCompletion();
-    }, [store.primaryHistory])
 
     return (
         <>
             <Container fluid="md" >
                 <Row>
                     <div id="year-bar">
-                        {/* <button onClick={() => { checkCompletion() }}>gimme the days</button>
-                    <br /> */}
                         <button onClick={() => { setYear(year - 1) }}><FontAwesomeIcon icon={['fas', 'chevron-left']} size="2x" /></button>
                         <h1>{year}</h1>
                         <button onClick={() => { setYear(Number(year) + 1) }}><FontAwesomeIcon icon={['fas', 'chevron-right']} size="2x" /></button>
                     </div>
                 </Row>
                 <Row className="justify-content-md-center">
-                    {/* <h2>jan feb mar apr may jun jul aug sep oct nov dev</h2> */}
                     <Col xs={"auto"}>
                         <h4>jan</h4>
-                        {renderDay(jan, 1, 'January')}
+                        {store.primaryHistory[0] && renderDay(jan, 1, 'January')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>feb</h4>
-                        {isLeapYear(year)}
+                        {store.primaryHistory[0] && isLeapYear(year)}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>mar</h4>
-                        {renderDay(mar, 3, 'March')}
+                        {store.primaryHistory[0] && renderDay(mar, 3, 'March')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>apr</h4>
-                        {renderDay(apr, 4, 'April')}
+                        {store.primaryHistory[0] && renderDay(apr, 4, 'April')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>may</h4>
-                        {renderDay(may, 5, 'May')}
+                        {store.primaryHistory[0] && renderDay(may, 5, 'May')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>jun</h4>
-                        {renderDay(jun, 6, 'June')}
+                        {store.primaryHistory[0] && renderDay(jun, 6, 'June')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>jul</h4>
-                        {renderDay(jul, 7, 'July')}
+                        {store.primaryHistory[0] && renderDay(jul, 7, 'July')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>aug</h4>
-                        {renderDay(aug, 8, 'August')}
+                        {store.primaryHistory[0] && renderDay(aug, 8, 'August')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>sep</h4>
-                        {renderDay(sep, 9, 'September')}
+                        {store.primaryHistory[0] && renderDay(sep, 9, 'September')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>oct</h4>
-                        {renderDay(oct, 10, 'October')}
+                        {store.primaryHistory[0] && renderDay(oct, 10, 'October')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>nov</h4>
-                        {renderDay(nov, 11, 'November')}
+                        {store.primaryHistory[0] && renderDay(nov, 11, 'November')}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>dec</h4>
-                        {renderDay(dec, 12, 'December')}
+                        {store.primaryHistory[0] && renderDay(dec, 12, 'December')}
                     </Col>
                 </Row>
             </Container>
