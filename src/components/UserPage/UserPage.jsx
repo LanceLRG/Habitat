@@ -55,18 +55,6 @@ function UserPage() {
     }
   }
 
-  const checkDay = () => {
-    let record = new Date(store.primaryTask.date)
-    let today = new Date();
-    console.log(store.primaryTask);
-    if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) > 86401000) {
-      console.log('That day was before today! by', (today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)));
-    }
-    else {
-      console.log('that day is today!')
-    }
-  }
-
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
     dispatch({ type: 'COMPLETE_TASK', payload: { taskId: taskId, userId: store.user.id } })
@@ -85,7 +73,6 @@ function UserPage() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_PRIMARY' });
-    dispatch({ type: 'FETCH_TASK' });
   }, [])
 
   useEffect(() => {

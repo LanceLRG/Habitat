@@ -31,10 +31,10 @@ function* fetchPrimary() {
             yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0)}})
             //resets user's tasks back to incomplete
             yield axios.put(`/api/task/resettask/`)
-            yield ({type: 'FETCH_TASK'})
         }
         yield put({ type: 'SET_PRIMARY_TASK', payload:response.data })
         yield put({ type: 'SET_PRIMARY_HISTORY', payload:response.data })
+        yield put({type: 'FETCH_TASK'})
     } catch (error) {
         console.log(`error GETTING primary task, ${error}`);
     }

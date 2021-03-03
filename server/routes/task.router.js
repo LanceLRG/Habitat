@@ -212,7 +212,7 @@ router.put('/toggle', rejectUnauthenticated, (req, res) => {
         queryText2 = `
         UPDATE "user"
         SET "current_streak" = ("current_streak" - 1)
-        WHERE "id" = $1`
+        WHERE "id" = $1 AND "current_streak" > 0`
     }
     else if (ptInfo.primeComp === false){
         queryText2 = `

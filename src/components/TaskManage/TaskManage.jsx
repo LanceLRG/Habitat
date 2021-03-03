@@ -10,6 +10,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
@@ -100,37 +102,37 @@ function manageTaskPage() {
         <>
             <Container>
                 <Form>
-                    <Form.Group as={Row}>
-                        <Form.Label as="legend" column="lg" lg={2}>Task Style</Form.Label>
-                        <Col sm={3}>
-                            <Form.Check
-                                type="radio"
-                                label="Single"
-                                name="formHorizontalRadios"
-                                id="formHorizontalRadios1"
-                                value="single"
-                                defaultChecked
-                                onClick={() => setStyleInput('single')}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="Multiple"
-                                name="formHorizontalRadios"
-                                id="formHorizontalRadios2"
-                                value="multiple"
-                                onClick={() => setStyleInput('multiple')}
-                            />
-                        </Col>
-                        <br />
-                        <Col>
-                            <p>Single tasks require only one action to be completed.</p>
-                            <p> Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
+                    <div className="form-view p-3 mb-3 mb-md-0 mr-md-3 bg-light">
+                        <Form.Group as={Row}>
+                            <Form.Label as="legend" column="lg" lg={2}>Task Style</Form.Label>
+                            <Col sm={3}>
+                                <Form.Check
+                                    type="radio"
+                                    label="Single"
+                                    name="formHorizontalRadios"
+                                    id="formHorizontalRadios1"
+                                    value="single"
+                                    defaultChecked
+                                    onClick={() => setStyleInput('single')}
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    label="Multiple"
+                                    name="formHorizontalRadios"
+                                    id="formHorizontalRadios2"
+                                    value="multiple"
+                                    onClick={() => setStyleInput('multiple')}
+                                />
+                            </Col>
+                            <br />
+                            <Col>
+                                <p>Single tasks require only one action to be completed.</p>
+                                <p> Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
                         </p>
-                        </Col>
-                        {/* <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
+                            </Col>
+                            {/* <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
                         <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label> */}
-                    </Form.Group>
-                    <div className="p-3 mb-3 mb-md-0 mr-md-3 bg-light">
+                        </Form.Group>
                         <h2>Task Design</h2>
                         <hr />
                         <br />
@@ -148,7 +150,6 @@ function manageTaskPage() {
                                 </Col>
 
                             </Form.Row>
-                            {/*TODO: set the determined radio to be ticked for an edit */}
                             <div className="p-3 mb-3 mb-md-0 mr-md-3 bg-light">
                                 {/* {console.log(typeof (iconInput))} */}
                                 <Form.Label as="legend" column="md" md={2}>choose an icon:</Form.Label>
@@ -163,17 +164,41 @@ function manageTaskPage() {
                             </div>
                         </Form.Group>
                         <hr />
-                        <div>
-                            <h3>Specifications</h3>
-                            <label htmlFor="amount">Amount:</label><input type="text" name="amount" placeholder="ex: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
-                            <label htmlFor="unit">Unit:</label><input type="text" name="unit" placeholder="ex: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
-                            <input type="checkbox" id="special" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} /><label htmlFor="special">Special Instruction:</label><input type="text" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
-                            {/* <button onClick={() => addSpecs()} >accept specifications</button> */}
-                            {moment().format()}
-                        </div>
-                        <button onClick={abortTask}>Cancel</button>
-                        {(store.edit.id) ? <button onClick={() => submitTask('edit')}>Submit Changes</button> : <button onClick={() => submitTask('add')}>Add Task</button>}
-                        {(store.edit.id) ? <button onClick={() => handleDelete(store.edit.id)}>Delete</button> : ''}
+                        <Form.Group>
+                            <div>
+                                <h3>Specifications</h3>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label htmlFor="amount">Amount</Form.Label>
+                                        <Form.Control name="amount" type="text" placeholder="example: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
+                                    </Col>
+                                    <Col>
+                                        <Form.Label htmlFor="unit" >Unit</Form.Label>
+                                        <Form.Control name="unit" type="text" placeholder="example: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setAmountInput(e.target.value)} />
+                                    </Col>
+                                </Form.Row>
+                                <br />
+                                <Form.Label htmlFor="special">Special Instruction:</Form.Label>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Checkbox aria-label="Checkbox for following text input" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} />
+                                            </InputGroup.Prepend>
+                                            <Form.Control aria-label="Text input with checkbox" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
+                                        </InputGroup>
+                            </div>
+                            <br />
+                            <Row>
+                                <Col xs="auto">
+                                    <Button variant="secondary" onClick={abortTask}>Cancel</Button>
+                                </Col>
+                                <Col xs={6}>
+                                    {(store.edit.id) ? <Button block variant="primary" onClick={() => submitTask('edit')}>Submit Changes</Button> : <Button block variant="success" onClick={() => submitTask('add')}>Add Task</Button>}
+                                </Col>
+                                <Col md={{ span: 1, offset: 3 }}>
+                                    {(store.edit.id) ? <Button variant="danger" onClick={() => handleDelete(store.edit.id)}>Delete</Button> : ''}
+                                </Col>
+                            </Row>
+                        </Form.Group>
                     </div>
                 </Form>
             </Container>
