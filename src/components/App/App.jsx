@@ -21,7 +21,6 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import TaskManage from '../TaskManage/TaskManage';
 import Calendar from '../Calendar/Calendar';
-import Sidebar from '../Sidebar/Sidebar';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 import { library } from '@fortawesome/fontawesome-svg-core';

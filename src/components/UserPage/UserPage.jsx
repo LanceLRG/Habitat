@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import './Dashboard.css';
 
+import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
@@ -86,51 +87,50 @@ function UserPage() {
 
   return (
     <div className="container">
-      <div>
-        {/* <button onClick={() => calcComplete()}>Calculate completions</button>
+      <Container fluid="md">
+        <div>
+          {/* <button onClick={() => calcComplete()}>Calculate completions</button>
         <button onClick={() => checkDay()}>Check Day</button>
         <button onClick={() => history.push('/calendar')}>Calendar</button> */}
-        <Card style={{ width: '100%' }}>
-          <Card.Header>
-            <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
-            <h5 class="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
-            {(store.primaryTask.complete) ? <FontAwesomeIcon id="star" icon={['fas', `star`]} color="gold" size="2x" /> : <FontAwesomeIcon id="star" icon={['fas', `star`]} opacity=".2" size="2x" />}
-          </Card.Header>
-          <Card.Body>
-            {/* <Card.Text>Longest Streak: {(store.primaryTask.long_streak)}</Card.Text> */}
-            <ProgressBar variant="info" now={percent} />
-          </Card.Body>
-        </Card>
-      </div>
-      <h2>Welcome, {user.username}!</h2>
-      {/* <button value={store.user.id} onClick={() => dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}})} >Button</button> */}
-      <p>Your ID is: {user.id}</p>
-      {/* draws a task for every task in the task reducer conditionally renders elements
-          based on whether or not certain elements are setup*/}
-      {store.task.map((task) =>
-        <Card  style={{ width: '100%', margin: '10px' }}>
-          <div className="task" key={task.id}>
+          <Card style={{ width: '100%' }}>
             <Card.Header>
-            <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
-              <h3 className="task-name">{task.name}</h3>
-              <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
-              <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
-              </OverlayTrigger>
-              {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
-              {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
+              <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
+              <h5 class="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
+              {(store.primaryTask.complete) ? <FontAwesomeIcon id="star" icon={['fas', `star`]} color="#ffbb3e" size="2x" /> : <FontAwesomeIcon id="star" icon={['fas', `star`]} opacity=".2" size="2x" />}
             </Card.Header>
-            <Card.Body>{(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
-              {(task.special) ? <p>{task.special}</p> : ''}
+            <Card.Body>
+              {/* <Card.Text>Longest Streak: {(store.primaryTask.long_streak)}</Card.Text> */}
+              <ProgressBar variant="info" now={percent} />
             </Card.Body>
-          </div>
-        </Card>
-      )}
-      <br />
-      <br />
-      <button className="btn btn-block btn-outline-primary" onClick={() => history.push('/taskmanage')}>Add task</button>
-      <br />
-      <br />
-      <LogOutButton />
+          </Card>
+        </div>
+        <h2>Welcome, {user.username}!</h2>
+        {/* <button value={store.user.id} onClick={() => dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}})} >Button</button> */}
+        <p>Your ID is: {user.id}</p>
+        {/* draws a task for every task in the task reducer conditionally renders elements
+          based on whether or not certain elements are setup*/}
+        {store.task.map((task) =>
+          <Card style={{ width: '100%', margin: '10px' }}>
+            <div className="task" key={task.id}>
+              <Card.Header>
+                <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
+                <h3 className="task-name">{task.name}</h3>
+                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
+                  <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
+                </OverlayTrigger>
+                {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
+                {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
+              </Card.Header>
+              <Card.Body>{(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
+                {(task.special) ? <p>{task.special}</p> : ''}
+              </Card.Body>
+            </div>
+          </Card>
+        )}
+        <br />
+        <br />
+        <button className="btn btn-block btn-outline-primary" onClick={() => history.push('/taskmanage')}>Add task</button>
+      </Container>
     </div>
   );
 }

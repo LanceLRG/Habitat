@@ -14,7 +14,7 @@ function Calendar() {
     const dispatch = useDispatch();
     const store = useSelector(store => store)
     const jan = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-    const feb = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,]
+    let feb = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
     const mar = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
     const apr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
     const may = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
@@ -34,22 +34,25 @@ function Calendar() {
 
     const isLeapYear = (year) => {
         if (year % 400 === 0) {
-            return true;
+            feb.push(29);
+            return renderDay(feb, 2, 'February');
         } else if (year % 100 === 0) {
-            return false;
+            return renderDay(feb, 2, 'February');
         } else if (year % 4 === 0) {
-            return true;
+            feb.push(29)
+            return renderDay(feb, 2, 'February');
         } else {
-            return false;
+            return renderDay(feb, 2, 'February');
         }
     }
 
     const renderDay = (month, monthNum, monthName) => month.map((day) => {
     
         let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="2x" />;
+        
     // for (let date of store.primaryHistory) {
     //     if((moment(date.date).format('l') === `${monthNum}/${day}/${year}`) && date.complete){
-    //         star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity="1" color="gold" size="2x" />;
+    //         star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="2x" />;
     //     }
     // };
     return(
@@ -94,7 +97,7 @@ function Calendar() {
                     </Col>
                     <Col xs={"auto"}>
                         <h4>feb</h4>
-                        {renderDay(feb, 2, 'February')}{(isLeapYear(year)) && <div className={`date February 29 ${year}`}>29</div>}
+                        {isLeapYear(year)}
                     </Col>
                     <Col xs={"auto"}>
                         <h4>mar</h4>
