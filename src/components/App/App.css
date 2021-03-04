@@ -30,41 +30,53 @@ Container
 Button
 -------------------------------------------------------------------------------- */
 
-/* .btn {
+ .butn {
+  font-weight: bold;
   display: inline-block;
-  padding: 10px 20px;
-  border-color: #014041;
+  padding: 10px 30px;
+  border-color: #12153f6e;
   border-width: 1px 1px 3px;
-  border-radius: 4px;
-  background-color: #00acb0;
-  color: #f8f8f8;
+  border-radius: 50px;
+  background-color: #3298dc;
+  color: white;
   font-size: 1.1rem;
   outline: 0;
   cursor: pointer;
 }
 
-.btn_sizeMin {
+.butn_sizeMin {
   min-height: 50px;
   min-width: 100px;
 }
 
-.btn_sizeSm {
+.butn_sizeSm {
   padding: 10px 15px;
   font-size: 0.8rem;
 }
 
-.btn_sizeFull {
+.butn_sizeFull {
   display: block;
   width: 100%;
 }
 
-.btn:hover {
-  background-color: #008183;
+.butn_register {
+  background-color: rgb(98, 240, 162);
+  color: black;
+}
+
+
+.butn:hover {
+  background-color: #1f79b6;
+  color: white;
   text-decoration: none;
 }
 
+.butn_register:hover {
+  background-color: rgb(65, 187, 120);
+}
+
 /* This line makes the "Register" and "Login" buttons look like links */
-.btn_asLink {
+.butn_asLink {
   padding: 0;
   border-width: 0;
   border-bottom: 1px solid #444;
@@ -74,7 +86,7 @@ Button
   color: #444;
 }
 
-.btn_asLink:hover {
+.butn_asLink:hover {
   background-color: transparent;
   border-color: #008183;
   color: #008183;

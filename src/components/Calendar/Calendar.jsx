@@ -46,16 +46,17 @@ function Calendar() {
 
     const renderDay = (month, monthNum, monthName) => month.map((day) => {
     
-        let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="1x" />;
+        let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="2x" />;
+        const digits = 'numday' + day.toString().length;
         
     for (let entry of store.primaryHistory) {
         if((moment(entry.date).format('l') === `${monthNum}/${day}/${year}`) && entry.complete){
-            star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="1x" />;
+            star = <FontAwesomeIcon icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="2x" />;
         }
     };
 
     return(
-    <div className={`date`}>{day}{star}</div>)})
+    <div className={`date`}><div className="star" >{star}</div><div className={digits}>{day}</div></div>)})
 
     useEffect(() => {
         dispatch({ type: 'FETCH_PRIMARY' });
@@ -73,51 +74,51 @@ function Calendar() {
                 </Row>
                 <Row className="justify-content-md-center">
                     <Col xs={"auto"}>
-                        <h4>jan</h4>
+                        <h4 className="month-short">jan</h4>
                         {store.primaryHistory[0] && renderDay(jan, 1, 'January')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>feb</h4>
+                        <h4 className="month-short">feb</h4>
                         {store.primaryHistory[0] && isLeapYear(year)}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>mar</h4>
+                        <h4 className="month-short">mar</h4>
                         {store.primaryHistory[0] && renderDay(mar, 3, 'March')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>apr</h4>
+                        <h4 className="month-short">apr</h4>
                         {store.primaryHistory[0] && renderDay(apr, 4, 'April')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>may</h4>
+                        <h4 className="month-short">may</h4>
                         {store.primaryHistory[0] && renderDay(may, 5, 'May')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>jun</h4>
+                        <h4 className="month-short">jun</h4>
                         {store.primaryHistory[0] && renderDay(jun, 6, 'June')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>jul</h4>
+                        <h4 className="month-short">jul</h4>
                         {store.primaryHistory[0] && renderDay(jul, 7, 'July')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>aug</h4>
+                        <h4 className="month-short">aug</h4>
                         {store.primaryHistory[0] && renderDay(aug, 8, 'August')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>sep</h4>
+                        <h4 className="month-short">sep</h4>
                         {store.primaryHistory[0] && renderDay(sep, 9, 'September')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>oct</h4>
+                        <h4 className="month-short">oct</h4>
                         {store.primaryHistory[0] && renderDay(oct, 10, 'October')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>nov</h4>
+                        <h4 className="month-short">nov</h4>
                         {store.primaryHistory[0] && renderDay(nov, 11, 'November')}
                     </Col>
                     <Col xs={"auto"}>
-                        <h4>dec</h4>
+                        <h4 className="month-short">dec</h4>
                         {store.primaryHistory[0] && renderDay(dec, 12, 'December')}
                     </Col>
                 </Row>

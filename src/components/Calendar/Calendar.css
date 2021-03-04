@@ -16,14 +16,30 @@ margin:auto;
     opacity: 1;
 }
 
-.date{
-    text-align: center;
-    justify-content: center;
-    margin: auto;
-    padding-bottom: 2px;
+.month-short, .date {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
 }
 
-.star{
+.date{
     position: relative;
-    margin: auto;
+    text-align: center;
+    justify-content: center;
+}
+
+.numday1 {
+    position: absolute;
+    top: 50%;
+    right: 28%;
+    transform: translate(-50%, -50%);
+}
+.numday2 {
+    position: absolute;
+    top: 50%;
+    right: 7%;
+    transform: translate(-50%, -50%);
+}
+
+.star {
+    position:relative;
 }
