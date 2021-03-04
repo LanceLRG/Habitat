@@ -53,7 +53,8 @@ function manageTaskPage() {
     }, [store.edit])
 
     const submitTask = (command) => {
-        const task_specs = [{
+
+        let task_specs = [{
             amount: (amountInput || null),
             unit: (unitInput || null),
             special: (specialInput || null),
@@ -62,6 +63,15 @@ function manageTaskPage() {
             stopwatch: false,
             stopwatchTime: null,
         }]
+
+        if (specialToggle){
+            task_specs[0].amount = null;
+            task_specs[0].unit = null;
+        }
+        else if (!specialToggle){
+            task_specs[0].special = null;
+        }
+
         const newTask = {
             id: (store.edit.id || ''),
             style: styleInput,
@@ -78,7 +88,7 @@ function manageTaskPage() {
             history.push('/home')
         }
         else if (command === 'edit') {
-            console.log('editing task');
+            console.log('editing task', newTask);
             dispatch({ type: 'EDIT_TASK', payload: newTask })
             history.push('/home')
         }
@@ -163,28 +173,28 @@ function manageTaskPage() {
                                 </div>
                             </div>
                         </Form.Group>
-                        <hr />
                         <Form.Group>
                             <div>
                                 <h3>Specifications</h3>
+                                <hr />
                                 <Form.Row>
                                     <Col>
                                         <Form.Label htmlFor="amount">Amount</Form.Label>
-                                        <Form.Control name="amount" type="text" placeholder="example: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
+                                        <Form.Control name="amount" type="number" placeholder="example: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
                                     </Col>
                                     <Col>
                                         <Form.Label htmlFor="unit" >Unit</Form.Label>
-                                        <Form.Control name="unit" type="text" placeholder="example: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setAmountInput(e.target.value)} />
+                                        <Form.Control name="unit" type="text" placeholder="example: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
                                     </Col>
                                 </Form.Row>
                                 <br />
                                 <Form.Label htmlFor="special">Special Instruction:</Form.Label>
-                                        <InputGroup>
-                                            <InputGroup.Prepend>
-                                                <InputGroup.Checkbox aria-label="Checkbox for following text input" defaultChecked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} />
-                                            </InputGroup.Prepend>
-                                            <Form.Control aria-label="Text input with checkbox" name="special" placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
-                                        </InputGroup>
+                                <InputGroup className="mb-3">
+                                    <InputGroup.Prepend>
+                                        <InputGroup.Checkbox checked={(specialToggle) ? true : false} onClick={() => setSpecialToggle(!specialToggle)} />
+                                    </InputGroup.Prepend>
+                                    <Form.Control placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
+                                </InputGroup>
                             </div>
                             <br />
                             <Row>
