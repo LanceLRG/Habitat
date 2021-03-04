@@ -11,6 +11,8 @@ import Card from 'react-bootstrap/Card';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
+import Accordion from 'react-bootstrap/Accordion'
+import Button from 'react-bootstrap/Button';
 
 function UserPage() {
 
@@ -109,22 +111,31 @@ function UserPage() {
         {/* draws a task for every task in the task reducer conditionally renders elements
           based on whether or not certain elements are setup*/}
         {store.task.map((task) =>
-          <Card style={{ width: '100%', margin: '10px' }}>
-            <div className="task" key={task.id}>
-              <Card.Header>
-                <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
-                <h3 className="task-name">{task.name}</h3>
-                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
-                  <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
-                </OverlayTrigger>
-                {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
-                {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
-              </Card.Header>
-              <Card.Body>{(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
-                {(task.special) ? <p>{task.special}</p> : ''}
-              </Card.Body>
-            </div>
-          </Card>
+          <Accordion>
+            <Card style={{ width: '100%', margin: '10px' }}>
+              <div className="task" key={task.id}>
+                <Card.Header>
+                  <Accordion.Toggle className='arrow' eventKey="0">
+                  <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>details</Tooltip>}>
+                      <FontAwesomeIcon id="icon" icon={['fas', `ellipsis-v`]} size="1x" color="#3298dc" />
+                      </OverlayTrigger>
+                  </Accordion.Toggle>
+                  <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
+                  <h3 className="task-name">{task.name}</h3>
+                  <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
+                    <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
+                  </OverlayTrigger>
+                  {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
+                  {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>{(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
+                    {(task.special) ? <p>{task.special}</p> : ''}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </div>
+            </Card>
+          </Accordion>
         )}
         <br />
         <br />

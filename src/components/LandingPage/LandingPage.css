@@ -1,3 +1,20 @@
+.jumbo{
+  background-image: url("/images/kai-pilger-Ef6iL87-vOA-unsplash.jpg");
+  background-size: contain;
+}
+
+.jumbo_h1, .jumbo_p, #member{
+  color: white;
+}
+#maxme{
+  height: 100%;
+}
+
+.intro{
+  background-color: rgba(128, 128, 128, 0.212);
+  padding: 30px;
+  border-radius: 10px;
+}
 /* --------------------------------------------------------------------------------
 Grid
 -------------------------------------------------------------------------------- */

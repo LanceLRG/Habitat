@@ -136,9 +136,12 @@ function manageTaskPage() {
                             </Col>
                             <br />
                             <Col>
-                                <p>Single tasks require only one action to be completed.</p>
-                                <p> Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
-                        </p>
+                            <Form.Text className="text-muted">
+                            Single tasks require only one action to be completed.
+                                    </Form.Text>
+                                    <Form.Text className="text-muted">
+                                    Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
+                                    </Form.Text>
                             </Col>
                             {/* <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
                         <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label> */}
@@ -155,8 +158,8 @@ function manageTaskPage() {
                                     <Form.Label>Task Name</Form.Label>
                                     <Form.Control type="text" placeholder="Task Name" value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
                                     <Form.Text className="text-muted">
-                                        Choose something specific like "reading" or "exercising"
-                        </Form.Text>
+                                        What do you want to do? Common tasks include "exercising", "reading", "meditating", etc.
+                                    </Form.Text>
                                 </Col>
 
                             </Form.Row>
@@ -181,6 +184,9 @@ function manageTaskPage() {
                                     <Col>
                                         <Form.Label htmlFor="amount">Amount</Form.Label>
                                         <Form.Control name="amount" type="number" placeholder="example: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
+                                        <Form.Text className="text-muted">
+                                        Start off small, something you can't say 'no' to. You can always raise it later.
+                                    </Form.Text>
                                     </Col>
                                     <Col>
                                         <Form.Label htmlFor="unit" >Unit</Form.Label>

@@ -3,10 +3,8 @@ body,
 #react-root {
   height: 100%;
   background-color: #ffffff;
-  background-image: url("https://www.transparenttextures.com/patterns/dotnoise-light-grey.png");
-  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+  background-image: url("/images/dotnoise-light-grey.png");
 }
-
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -35,7 +33,7 @@ Button
   display: inline-block;
   padding: 10px 30px;
   border-color: #12153f6e;
-  border-width: 1px 1px 3px;
+  border-width: 0px 0px 3px;
   border-radius: 50px;
   background-color: #3298dc;
   color: white;
@@ -69,6 +67,11 @@ Button
   background-color: #1f79b6;
   color: white;
   text-decoration: none;
+}
+
+.butn:active{
+  border-width: 0px 0px 3px;
+  transform: translateY(1px);
 }
 
 .butn_register:hover {

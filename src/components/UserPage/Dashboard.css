@@ -49,3 +49,18 @@
 .task-card{
     padding: 10px;
 }
+
+.arrow{
+    background: none;
+    border: none;
+}
+
+.arrow-down{
+    transform: rotate(0deg);
+    transition: transform 1s linear;
+}
+
+.arrow-up{
+    transform: rotate(180deg);
+    transition: transform 1s linear;
+}
