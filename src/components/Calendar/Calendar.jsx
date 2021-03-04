@@ -48,15 +48,17 @@ function Calendar() {
     
         let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="2x" />;
         const digits = 'numday' + day.toString().length;
+        let thisDay = <div className={`${digits} day_off`}>{day}</div>
         
     for (let entry of store.primaryHistory) {
         if((moment(entry.date).format('l') === `${monthNum}/${day}/${year}`) && entry.complete){
             star = <FontAwesomeIcon icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="2x" />;
+            thisDay = <div className={`${digits} day_on`}>{day}</div>
         }
     };
 
     return(
-    <div className={`date`}><div className="star" >{star}</div><div className={digits}>{day}</div></div>)})
+    <div className={`date`}><div className="star" >{star}</div>{thisDay}</div>)})
 
     useEffect(() => {
         dispatch({ type: 'FETCH_PRIMARY' });
@@ -64,7 +66,8 @@ function Calendar() {
 
     return (
         <>
-            <Container fluid="md" >
+            <Container>
+                <div className="box">
                 <Row>
                     <div id="year-bar">
                         <button onClick={() => { setYear(year - 1) }}><FontAwesomeIcon icon={['fas', 'chevron-left']} size="2x" /></button>
@@ -72,6 +75,7 @@ function Calendar() {
                         <button onClick={() => { setYear(Number(year) + 1) }}><FontAwesomeIcon icon={['fas', 'chevron-right']} size="2x" /></button>
                     </div>
                 </Row>
+                <hr />
                 <Row className="justify-content-md-center">
                     <Col xs={"auto"}>
                         <h4 className="month-short">jan</h4>
@@ -122,6 +126,7 @@ function Calendar() {
                         {store.primaryHistory[0] && renderDay(dec, 12, 'December')}
                     </Col>
                 </Row>
+                </div>
             </Container>
         </>
     )
