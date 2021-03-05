@@ -38,6 +38,10 @@ function manageTaskPage() {
             setIconInput(store.edit.icon);
             setAmountInput(store.edit.amount || '');
             setUnitInput(store.edit.unit || '');
+            if (store.edit.timer) {
+                setTimerToggle(true);
+                setTimerTime(store.edit.timer_time);
+            }
             if (store.edit.special) {
                 setSpecialToggle(true);
                 setSpecialInput(store.edit.special);
@@ -91,6 +95,7 @@ function manageTaskPage() {
         else if (command === 'edit') {
             console.log('editing task', newTask);
             dispatch({ type: 'EDIT_TASK', payload: newTask })
+            dispatch({type: 'UNSET_EDIT'})
             history.push('/home')
         }
     }

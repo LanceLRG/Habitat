@@ -39,6 +39,7 @@ function UserPage() {
   // it will set the day's completion back to false.
   const [percent, setPercent] = useState(0);
   const [myTime, setMytime] = useState('');
+  const [timerTaskName, setTimerTaskName] = useState('');
   const [timerId, setTimerId] = useState('');
 
   const calcComplete = () => {
@@ -104,16 +105,17 @@ function UserPage() {
 
   const [modalShow, setModalShow] = useState(false);
 
-  const myTimer = (myTime, id) => {
+  const myTimer = (myTime, id, name) => {
+    setTimerTaskName(name)
+    setTimerId(id);
+    setMytime(myTime);
     setModalShow(true);
-    setTimerId(id)
-    setMytime(myTime)
   }
 
   const completer = (task) => {
     if (task.timer) {
       return (
-        <FontAwesomeIcon className="timer-button" icon={['far', `clock`]} size="2x" color="#3298dc" onClick={() => myTimer(task.timer_time, task.id)} />
+        <FontAwesomeIcon className="timer-button" icon={['far', `clock`]} size="2x" color="#3298dc" onClick={() => myTimer(task.timer_time, task.id, task.name)} />
       )
     }
     else {
@@ -135,7 +137,7 @@ function UserPage() {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Timer
+            Timer for: {timerTaskName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
