@@ -106,8 +106,10 @@ function manageTaskPage() {
         history.push('/home')
     }
 
+    //list of icon names which will be looped over and displayed for selection
     const iconList = ['coffee', 'image', 'dumbbell', 'bicycle', `book-reader`, `book`, `brain`, `capsules`, `code`, `dollar-sign`, `dungeon`, `fist-raised`, `gamepad`, `globe`, `graduation-cap`, `guitar`, `hamburger`, `headphones-alt`, `hiking`, `home`, `music`,
-        `language`, `hard-hat`, `dice`, `file-invoice-dollar`, `utensils`, `images`]
+        `language`, `hard-hat`, `dice`, `file-invoice-dollar`, `utensils`, `images`, `baby`, `wine-glass-alt`, `swimmer`, `leaf`, `shopping-cart`, `drafting-compass`, `quote-right`, `trophy`, `wrench`, `smoking-ban`, `couch`, `dog`, `key`, `marker`, `mobile`, `phone`,
+         `place-of-worship`, `plug`, `pray`, `running`, `school`, `stethoscope`, `tooth`, `tv`, 'walking', 'yin-yang' ]
     return (
         <>
             <Container>

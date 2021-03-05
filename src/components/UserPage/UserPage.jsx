@@ -39,10 +39,14 @@ function UserPage() {
       setPercent((compCount / store.task.length) * 100)
     }
     console.log(compCount, store.task.length);
+    const today = new Date();
+    console.log(`todays date:`, moment(today.setHours(0, 0, 0, 0)).format('l'));
     //no free streaks if you have no tasks
-    if (store.task.length <= 0) {
+    //does not trigger if a day that isn't today is in the reducer
+    if (store.task.length <= 0 || (moment(store.primaryTask.date).format('l') !== moment(today.setHours(0, 0, 0, 0)).format('l'))) {
       return;
     }
+    
     if (compCount === store.task.length && !store.primaryTask.complete) {
       dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } })
     }
@@ -95,8 +99,8 @@ function UserPage() {
         <button onClick={() => history.push('/calendar')}>Calendar</button> */}
           <Card style={{ width: '100%' }}>
             <Card.Header>
-              <h1 class="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
-              <h5 class="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
+              <h1 className="font-weight-bold">{moment().format('MMMM Do YYYY')}</h1>
+              <h5 className="header text-right">Current Streak: {store.primaryTask.current_streak}</h5>
               {(store.primaryTask.complete) ? <FontAwesomeIcon id="star" icon={['fas', `star`]} color="#ffbb3e" size="2x" /> : <FontAwesomeIcon id="star" icon={['fas', `star`]} opacity=".2" size="2x" />}
             </Card.Header>
             <Card.Body>
@@ -105,9 +109,8 @@ function UserPage() {
             </Card.Body>
           </Card>
         </div>
-        <h2>Welcome, {user.username}!</h2>
-        {/* <button value={store.user.id} onClick={() => dispatch({type:'FETCH_TASK', payload: {userId: store.user.id}})} >Button</button> */}
-        <p>Your ID is: {user.id}</p>
+        {/* <h2>Welcome, {user.username}!</h2>
+        <p>Your ID is: {user.id}</p> */}
         {/* draws a task for every task in the task reducer conditionally renders elements
           based on whether or not certain elements are setup*/}
         {store.task.map((task) =>
@@ -116,7 +119,7 @@ function UserPage() {
               <div className="task" key={task.id}>
                 <Card.Header>
                   <Accordion.Toggle className='arrow' eventKey="0">
-                  <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>details</Tooltip>}>
+                  <OverlayTrigger key="left" placement="left" overlay={<Tooltip id={'tooltip-left'}>details</Tooltip>}>
                       <FontAwesomeIcon id="icon" icon={['fas', `ellipsis-v`]} size="1x" color="#3298dc" />
                       </OverlayTrigger>
                   </Accordion.Toggle>

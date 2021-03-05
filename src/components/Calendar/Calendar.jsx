@@ -45,20 +45,21 @@ function Calendar() {
     }
 
     const renderDay = (month, monthNum, monthName) => month.map((day) => {
-    
+
         let star = <FontAwesomeIcon className="star" icon={['fas', `star`]} opacity=".2" size="2x" />;
         const digits = 'numday' + day.toString().length;
         let thisDay = <div className={`${digits} day_off`}>{day}</div>
-        
-    for (let entry of store.primaryHistory) {
-        if((moment(entry.date).format('l') === `${monthNum}/${day}/${year}`) && entry.complete){
-            star = <FontAwesomeIcon icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="2x" />;
-            thisDay = <div className={`${digits} day_on`}>{day}</div>
-        }
-    };
 
-    return(
-    <div className={`date`}><div className="star" >{star}</div>{thisDay}</div>)})
+        for (let entry of store.primaryHistory) {
+            if ((moment(entry.date).format('l') === `${monthNum}/${day}/${year}`) && entry.complete) {
+                star = <FontAwesomeIcon icon={['fas', `star`]} opacity="1" color="#ffbb3e" size="2x" />;
+                thisDay = <div className={`${digits} day_on`}>{day}</div>
+            }
+        };
+
+        return (
+            <div className={`date`}><div className="star" >{star}</div>{thisDay}</div>)
+    })
 
     useEffect(() => {
         dispatch({ type: 'FETCH_PRIMARY' });
@@ -68,64 +69,69 @@ function Calendar() {
         <>
             <Container>
                 <div className="box">
-                <Row>
-                    <div id="year-bar">
-                        <button onClick={() => { setYear(year - 1) }}><FontAwesomeIcon icon={['fas', 'chevron-left']} size="2x" /></button>
-                        <h1>{year}</h1>
-                        <button onClick={() => { setYear(Number(year) + 1) }}><FontAwesomeIcon icon={['fas', 'chevron-right']} size="2x" /></button>
-                    </div>
-                </Row>
-                <hr />
-                <Row className="justify-content-md-center">
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">jan</h4>
-                        {store.primaryHistory[0] && renderDay(jan, 1, 'January')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">feb</h4>
-                        {store.primaryHistory[0] && isLeapYear(year)}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">mar</h4>
-                        {store.primaryHistory[0] && renderDay(mar, 3, 'March')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">apr</h4>
-                        {store.primaryHistory[0] && renderDay(apr, 4, 'April')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">may</h4>
-                        {store.primaryHistory[0] && renderDay(may, 5, 'May')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">jun</h4>
-                        {store.primaryHistory[0] && renderDay(jun, 6, 'June')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">jul</h4>
-                        {store.primaryHistory[0] && renderDay(jul, 7, 'July')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">aug</h4>
-                        {store.primaryHistory[0] && renderDay(aug, 8, 'August')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">sep</h4>
-                        {store.primaryHistory[0] && renderDay(sep, 9, 'September')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">oct</h4>
-                        {store.primaryHistory[0] && renderDay(oct, 10, 'October')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">nov</h4>
-                        {store.primaryHistory[0] && renderDay(nov, 11, 'November')}
-                    </Col>
-                    <Col xs={"auto"}>
-                        <h4 className="month-short">dec</h4>
-                        {store.primaryHistory[0] && renderDay(dec, 12, 'December')}
-                    </Col>
-                </Row>
+                    <Row>
+                        <div id="year-bar">
+                            <button onClick={() => { setYear(year - 1) }}><FontAwesomeIcon icon={['fas', 'chevron-left']} size="2x" /></button>
+                            <h1>{year}</h1>
+                            <button onClick={() => { setYear(Number(year) + 1) }}><FontAwesomeIcon icon={['fas', 'chevron-right']} size="2x" /></button>
+                        </div>
+                    </Row>
+                    <hr />
+                    <Row className="justify-content-md-center">
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">jan</h4>
+                            {store.primaryHistory[0] && renderDay(jan, 1, 'January')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">feb</h4>
+                            {store.primaryHistory[0] && isLeapYear(year)}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">mar</h4>
+                            {store.primaryHistory[0] && renderDay(mar, 3, 'March')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">apr</h4>
+                            {store.primaryHistory[0] && renderDay(apr, 4, 'April')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">may</h4>
+                            {store.primaryHistory[0] && renderDay(may, 5, 'May')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">jun</h4>
+                            {store.primaryHistory[0] && renderDay(jun, 6, 'June')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">jul</h4>
+                            {store.primaryHistory[0] && renderDay(jul, 7, 'July')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">aug</h4>
+                            {store.primaryHistory[0] && renderDay(aug, 8, 'August')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">sep</h4>
+                            {store.primaryHistory[0] && renderDay(sep, 9, 'September')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">oct</h4>
+                            {store.primaryHistory[0] && renderDay(oct, 10, 'October')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">nov</h4>
+                            {store.primaryHistory[0] && renderDay(nov, 11, 'November')}
+                        </Col>
+                        <Col xs={"auto"}>
+                            <h4 className="month-short">dec</h4>
+                            {store.primaryHistory[0] && renderDay(dec, 12, 'December')}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div className="streak">Your longest streak is: {store.user.long_streak} {(store.user.long_streak > 1 || store.user.long_streak === 0) ? 'days' : 'day'}!</div>
+                        </Col>
+                    </Row>
                 </div>
             </Container>
         </>
