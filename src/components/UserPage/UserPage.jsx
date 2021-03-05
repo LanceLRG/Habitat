@@ -38,7 +38,9 @@ function UserPage() {
   // If the day is marked as 'complete' but there aren't enough 'task-completes'
   // it will set the day's completion back to false.
   const [percent, setPercent] = useState(0);
-  const [myTime, setMytime] = useState('')
+  const [myTime, setMytime] = useState('');
+  const [timerId, setTimerId] = useState('');
+
   const calcComplete = () => {
     let compCount = 0;
 
@@ -102,15 +104,16 @@ function UserPage() {
 
   const [modalShow, setModalShow] = useState(false);
 
-  const myTimer = (myTime) => {
+  const myTimer = (myTime, id) => {
     setModalShow(true);
+    setTimerId(id)
     setMytime(myTime)
   }
 
   const completer = (task) => {
     if (task.timer) {
       return (
-        <FontAwesomeIcon className="timer-button" icon={['far', `clock`]} size="2x" color="#3298dc" onClick={() => myTimer(task.timer_time)} />
+        <FontAwesomeIcon className="timer-button" icon={['far', `clock`]} size="2x" color="#3298dc" onClick={() => myTimer(task.timer_time, task.id)} />
       )
     }
     else {
@@ -127,6 +130,7 @@ function UserPage() {
         {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
+        backdrop="static"
         centered
       >
         <Modal.Header closeButton>
@@ -138,8 +142,8 @@ function UserPage() {
         <Timer initialTime={countdown} direction="backward" startImmediately={false}
             checkpoints={[
               {
-                time: ((myTime * 60 * 1000) - 5000),
-                callback: () => console.log('Checkpoint A'),
+                time: 0,
+                callback: () => {setModalShow(false); markComplete(timerId) },
               }
             ]}
           >
@@ -168,7 +172,6 @@ function UserPage() {
 
   return (
     <>
-      <Button variant="info" onClick={() => setModalShow(true)}>Launch Modal</Button>
       <MyVerticallyCenteredModal
         show={modalShow}
         onHide={() => setModalShow(false)}
