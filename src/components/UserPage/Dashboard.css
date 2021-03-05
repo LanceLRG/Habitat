@@ -34,6 +34,11 @@
     border: 2px solid;
 }
 
+.timer-button{
+    position: absolute;
+    right: 5rem;
+}
+
 .complete-button{
     border-color: black;
     color: black;

@@ -15,11 +15,6 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
-// This is one of our simplest components
-// It doesn't have local state
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is
-
 function manageTaskPage() {
 
     const store = useSelector(store => store)
@@ -33,6 +28,8 @@ function manageTaskPage() {
     const [unitInput, setUnitInput] = useState('');
     const [specialToggle, setSpecialToggle] = useState(false)
     const [specialInput, setSpecialInput] = useState('');
+    const [timerToggle, setTimerToggle] = useState(false);
+    const [timerTime, setTimerTime] = useState('');
 
     const fillIn = () => {
         if (store.edit.id) {
@@ -58,18 +55,22 @@ function manageTaskPage() {
             amount: (amountInput || null),
             unit: (unitInput || null),
             special: (specialInput || null),
-            timer: false,
-            timerTime: null,
+            timer: timerToggle,
+            timerTime: (timerTime || null),
             stopwatch: false,
             stopwatchTime: null,
         }]
 
-        if (specialToggle){
+        if (specialToggle || timerToggle) {
             task_specs[0].amount = null;
             task_specs[0].unit = null;
         }
-        else if (!specialToggle){
+        else if (!specialToggle) {
             task_specs[0].special = null;
+        }
+        else if (!timerToggle) {
+            task_specs[0].timer = false;
+            task_specs[0].timer_time = null;
         }
 
         const newTask = {
@@ -109,7 +110,7 @@ function manageTaskPage() {
     //list of icon names which will be looped over and displayed for selection
     const iconList = ['coffee', 'image', 'dumbbell', 'bicycle', `book-reader`, `book`, `brain`, `capsules`, `code`, `dollar-sign`, `dungeon`, `fist-raised`, `gamepad`, `globe`, `graduation-cap`, `guitar`, `hamburger`, `headphones-alt`, `hiking`, `home`, `music`,
         `language`, `hard-hat`, `dice`, `file-invoice-dollar`, `utensils`, `images`, `baby`, `wine-glass-alt`, `swimmer`, `leaf`, `shopping-cart`, `drafting-compass`, `quote-right`, `trophy`, `wrench`, `smoking-ban`, `couch`, `dog`, `key`, `marker`, `mobile`, `phone`,
-         `place-of-worship`, `plug`, `pray`, `running`, `school`, `stethoscope`, `tooth`, `tv`, 'walking', 'yin-yang' ]
+        `place-of-worship`, `plug`, `pray`, `running`, `school`, `stethoscope`, `tooth`, `tv`, 'walking', 'yin-yang']
     return (
         <>
             <Container>
@@ -138,10 +139,10 @@ function manageTaskPage() {
                             </Col>
                             <br />
                             <Col>
-                            <Form.Text className="text-muted">
-                            Single tasks require only one action to be completed.
+                                <Form.Text className="text-muted">
+                                    Single tasks require only one action to be completed.
                                     </Form.Text>
-                                    <Form.Text className="text-muted">
+                                <Form.Text className="text-muted">
                                     Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
                                     </Form.Text>
                             </Col>
@@ -181,18 +182,31 @@ function manageTaskPage() {
                         <Form.Group>
                             <div>
                                 <h3>Specifications</h3>
+                                <Form.Text className="text-muted">
+                                            Start off small, something you can't say 'no' to. You can always raise it later.
+                                    </Form.Text>
                                 <hr />
                                 <Form.Row>
                                     <Col>
                                         <Form.Label htmlFor="amount">Amount</Form.Label>
-                                        <Form.Control name="amount" type="number" placeholder="example: 20" disabled={(specialToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
-                                        <Form.Text className="text-muted">
-                                        Start off small, something you can't say 'no' to. You can always raise it later.
-                                    </Form.Text>
+                                        <Form.Control name="amount" type="number" placeholder="example: 20" disabled={(specialToggle || timerToggle) ? true : false} value={amountInput} onChange={(e) => setAmountInput(e.target.value)} />
+
+                                        <Form.Label htmlFor="unit" >Unit</Form.Label>
+                                        <Form.Control name="unit" type="text" placeholder="example: push-ups" disabled={(specialToggle || timerToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
                                     </Col>
                                     <Col>
-                                        <Form.Label htmlFor="unit" >Unit</Form.Label>
-                                        <Form.Control name="unit" type="text" placeholder="example: push-ups" disabled={(specialToggle) ? true : false} value={unitInput} onChange={(e) => setUnitInput(e.target.value)} />
+                                        <Form.Group controlId="formBasicCheckbox">
+                                            <Form.Check type="checkbox" label="Timer" checked={(timerToggle) ? true : false} onClick={() => setTimerToggle(!timerToggle)}/>
+                                            <InputGroup>
+                                            <Form.Control aria-describedby="basic-addon1" name="timer" type="number" disabled={(timerToggle) ? false : true} value={timerTime} onChange={(e) => setTimerTime(e.target.value)}/>
+                                            <InputGroup.Append>
+                                            <InputGroup.Text id="basic-addon1">Minutes</InputGroup.Text>
+                                            </InputGroup.Append>
+                                            </InputGroup>
+                                            <Form.Text className="text-muted">
+                                                Tasks with a timer require the timer to run fully before being marked complete. If you'd prefer to manage your time less strictly, record it into the amount and unit fields and keep track of the time by some other means.
+                                            </Form.Text>
+                                        </Form.Group>
                                     </Col>
                                 </Form.Row>
                                 <br />
@@ -203,6 +217,9 @@ function manageTaskPage() {
                                     </InputGroup.Prepend>
                                     <Form.Control placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
                                 </InputGroup>
+                                <Form.Text className="text-muted">
+                                            This is also a good place to specify <i>when</i> you'd like to do something, like "after work" or "on the bus".
+                                    </Form.Text>
                             </div>
                             <br />
                             <Row>

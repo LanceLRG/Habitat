@@ -5,6 +5,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import './Dashboard.css';
+import Timer from 'react-compound-timer';
 
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card';
@@ -13,13 +14,41 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 import Accordion from 'react-bootstrap/Accordion'
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+// import ModalDialog from 'react-bootstrap/ModalDialog'
+// import ModalHeader from 'react-bootstrap/ModalHeader'
+// import ModalTitle from 'react-bootstrap/ModalTitle'
+// import ModalBody from 'react-bootstrap/ModalBody'
+// import ModalFooter from 'react-bootstrap/ModalFooter'
+
+// function timerModal(props){
+//   return(
+//     <Modal {...props} size="lg" centered>
+//       <Modal.Header closeButton>
+//         <Modal.Title id="contained-modal-title-vcenter">
+//           Timer
+//         </Modal.Title>
+//       </Modal.Header>
+//       <Modal.Body>
+//         Hello
+//         {/* <Timer initialtime={specs}>
+//           <Timer.Minutes/>:
+//           <Timer.Seconds/> 
+//         </Timer>*/}
+//       </Modal.Body>
+//       <Modal.Footer>
+//         <Button onClick={props.onHide}>Close</Button>
+//       </Modal.Footer>
+//     </Modal>
+//   )
+// }
 
 function UserPage() {
 
   const dispatch = useDispatch();
   const store = useSelector(store => store);
   const history = useHistory();
-  const user = useSelector((store) => store.user);
+  //const user = useSelector((store) => store.user);
 
   // This task runs every time a 'complete' or 'undo' is made.
   // It will check if the number of 'task-completes' is equal to the number of tasks 
@@ -46,7 +75,7 @@ function UserPage() {
     if (store.task.length <= 0 || (moment(store.primaryTask.date).format('l') !== moment(today.setHours(0, 0, 0, 0)).format('l'))) {
       return;
     }
-    
+
     if (compCount === store.task.length && !store.primaryTask.complete) {
       dispatch({ type: 'TOGGLE_DAY', payload: { primeTaskId: store.primaryTask.id, primeComp: store.primaryTask.complete, userId: store.user.id } })
     }
@@ -90,9 +119,59 @@ function UserPage() {
     calcComplete();
   }, [store.primaryTask])
 
+  // const [modalShow, setModalShow] = useState(false);
+
+  const myTimer = (myTime) => {
+    console.log('hello');
+    let countdown = (myTime * 60 * 1000)
+    return (
+      <>
+        <Timer initialTime={countdown} direction="backward" startImmediately={false}
+          checkpoints={[
+            {
+              time: ((myTime * 60 * 1000) - 5000),
+              callback: () => console.log('Checkpoint A'),
+            }
+          ]}
+        >
+          {({ start, stop, reset }) => (
+            <React.Fragment>
+              <div>
+                <Timer.Minutes />:
+              <Timer.Seconds />
+              </div>
+              <br />
+              <div>
+                <button onClick={start}>Start</button>
+                <button onClick={stop}>Stop</button>
+                <button onClick={reset}>Reset</button>
+              </div>
+            </React.Fragment>
+          )}
+        </Timer>
+      </>
+    )
+}
+
+  const completer = (task) => {
+    if (task.timer) {
+      return(
+      <FontAwesomeIcon className="timer-button" icon={['far', `clock`]} size="2x" color="#3298dc" onClick={() => myTimer(task.timer_time)} />
+      )
+    }
+    else {
+      return (
+        <button className="complete-button" onClick={() => markComplete(task.id)}>Complete</button>
+      )
+    }
+  }
+
   return (
     <div className="container">
       <Container fluid="md">
+
+        {/* <Button variant="info" onClick={() => setModalShow(true)}>Launch Modal</Button>
+        <timerModal show={modalShow} onHide={() => setModalShow(false)}/> */}
         <div>
           {/* <button onClick={() => calcComplete()}>Calculate completions</button>
         <button onClick={() => checkDay()}>Check Day</button>
@@ -119,21 +198,22 @@ function UserPage() {
               <div className="task" key={task.id}>
                 <Card.Header>
                   <Accordion.Toggle className='arrow' eventKey="0">
-                  <OverlayTrigger key="left" placement="left" overlay={<Tooltip id={'tooltip-left'}>details</Tooltip>}>
+                    <OverlayTrigger key="left" placement="left" delay={{ show: 300 }} overlay={<Tooltip id={'tooltip-left'}>details</Tooltip>}>
                       <FontAwesomeIcon id="icon" icon={['fas', `ellipsis-v`]} size="1x" color="#3298dc" />
-                      </OverlayTrigger>
+                    </OverlayTrigger>
                   </Accordion.Toggle>
                   <FontAwesomeIcon id="icon" icon={['fas', `${task.icon}`]} size="2x" />
                   <h3 className="task-name">{task.name}</h3>
-                  <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
+                  <OverlayTrigger key="top" placement="top" delay={{ show: 200 }} overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
                     <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
                   </OverlayTrigger>
-                  {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : <button className="complete-button" value={task.id} onClick={(e) => markComplete(e.target.value)}>Complete</button>}
+                  {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : completer(task)}
                   {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
-                  <Card.Body>{(task.amount) ? <p>{task.amount} {task.unit}</p> : ''}
-                    {(task.special) ? <p>{task.special}</p> : ''}
+                  <Card.Body>{(task.amount) && <p>{task.amount} {task.unit}</p>}
+                    {(task.special) && <p>{task.special}</p>}
+                    {(task.timer) && <p>{task.timer_time} minutes</p>}
                   </Card.Body>
                 </Accordion.Collapse>
               </div>
