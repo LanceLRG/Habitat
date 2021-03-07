@@ -69,3 +69,31 @@
     transform: rotate(180deg);
     transition: transform 1s linear;
 }
+
+#timer_display{
+    text-align: center;
+    font-size: 3rem;
+}
+
+.timerControl{
+    display: inline-block;
+    text-align: center;
+    margin: 30px;
+}
+
+.timer_control_container{
+    margin-left: 29%;
+}
+
+#timer_header{
+    text-align: center;
+    background-color: rgb(44, 148, 196);
+}
+
+#timer_icon:hover{
+    color:cadetblue;
+}
+
+#timer_icon:active{
+    transform: translateY(2px)
+}

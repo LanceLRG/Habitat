@@ -63,7 +63,7 @@ function Calendar() {
 
     useEffect(() => {
         dispatch({ type: 'FETCH_PRIMARY' });
-    }, [])
+    }, [store.user])
 
     return (
         <>

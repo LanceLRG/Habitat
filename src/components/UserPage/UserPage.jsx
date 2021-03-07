@@ -10,8 +10,9 @@ import Timer from 'react-compound-timer';
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Tooltip from 'react-bootstrap/Tooltip'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import Popover from 'react-bootstrap/Popover'
 import Accordion from 'react-bootstrap/Accordion'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -74,6 +75,13 @@ function UserPage() {
     }
   }
 
+  // const checkStreakBreak = () => {
+  //   today = new Date();
+  //   latestDay = store.primaryHistory[0].date
+  //   if ((moment(latestDay.setHours(0, 0, 0, 0)).format('l') === moment(today.setHours(0, 0, 0, 0)).format('l')) && !store.primaryHistory[1].complete){
+  //     dispatch({type: })
+  // }
+
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
     dispatch({ type: 'COMPLETE_TASK', payload: { taskId: taskId, userId: store.user.id } })
@@ -102,6 +110,16 @@ function UserPage() {
     calcStreak();
     calcComplete();
   }, [store.primaryTask])
+
+  const timerInfoPopover = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">Timer Info</Popover.Title>
+      <Popover.Content>
+        Just let the timer countdown to zero this window will close by itself
+      and your task will complete. <strong><i>If you close out early, you'll have to restart</i></strong>
+      </Popover.Content>
+    </Popover>
+  );
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -135,31 +153,45 @@ function UserPage() {
         backdrop="static"
         centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header id="timer_header" >
+          <OverlayTrigger trigger="click" placement="right" overlay={timerInfoPopover}>
+            <FontAwesomeIcon icon={['fas', `info-circle`]} size="2x" />
+          </OverlayTrigger>
           <Modal.Title id="contained-modal-title-vcenter">
-            Timer for: {timerTaskName}
+            {timerTaskName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Timer initialTime={countdown} direction="backward" startImmediately={false}
+          <Timer initialTime={countdown} direction="backward" startImmediately={false}
             checkpoints={[
               {
                 time: 0,
-                callback: () => {setModalShow(false); markComplete(timerId) },
+                callback: () => { setModalShow(false); markComplete(timerId) },
               }
             ]}
           >
             {({ start, stop, reset }) => (
               <React.Fragment>
-                <div>
+                <div id="timer_display">
                   <Timer.Minutes />:
                 <Timer.Seconds />
                 </div>
-                <br />
-                <div>
-                  <button onClick={start}>Start</button>
-                  <button onClick={stop}>Stop</button>
-                  <button onClick={reset}>Reset</button>
+                <div className="timer_control_container">
+                  <div className="timerControl" id="play_button">
+                    <FontAwesomeIcon id="timer_icon" icon={['fas', `play-circle`]} size="3x" onClick={start} />
+                    <br />
+                    Start
+                  </div>
+                  <div className="timerControl" id="pause_button">
+                    <FontAwesomeIcon id="timer_icon" icon={['fas', `pause-circle`]} size="3x" onClick={stop} />
+                    <br />
+                    Pause
+                  </div>
+                  <div className="timerControl" id="reset_button">
+                    <FontAwesomeIcon id="timer_icon" icon={['fas', `undo-alt`]} size="3x" onClick={reset} />
+                    <br />
+                    Reset
+                  </div>
                 </div>
               </React.Fragment>
             )}
@@ -217,7 +249,7 @@ function UserPage() {
                     <OverlayTrigger key="top" placement="top" delay={{ show: 200 }} overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
                       <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
                     </OverlayTrigger>
-                    {(task.tcomplete) ? <button className="btn-secondary undo-button" value={task.id} onClick={(e) => markUndo(e.target.value)}>Undo</button> : completer(task)}
+                    {(task.tcomplete) ? <button className="btn-secondary undo-button" onClick={() => markUndo(task.id)}>Undo</button> : completer(task)}
                     {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
                   </Card.Header>
                   <Accordion.Collapse eventKey="0">

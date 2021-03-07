@@ -18,12 +18,12 @@ function* fetchPrimary() {
         const response = yield axios.get(`/api/task/primary/`)
         const today = new Date();
         if (!response.data[0]){
+            //if there's nothing in the record, add today and try again.
             yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0)}})
         }
         const record = new Date(response.data[0].date);
-        //TODO: implement an automatic NEW DAY to check current day with most recent primary task date and add trigger day resets
         if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000 || !response.data) {
-            if (response.data[0].complete === false){
+            if (response.data[0].complete === false || (today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 17280000){
                 console.log('breaking your streak!');
                 yield axios.put('/api/task/break')
             }
