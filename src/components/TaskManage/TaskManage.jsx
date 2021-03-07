@@ -123,7 +123,7 @@ function manageTaskPage() {
             <Container>
                 <Form>
                     <div className="form-view p-3 mb-3 mb-md-0 mr-md-3 bg-light">
-                        <Form.Group as={Row}>
+                        {/* <Form.Group as={Row}>
                             <Form.Label as="legend" column="lg" lg={2}>Task Style</Form.Label>
                             <Col sm={3}>
                                 <Form.Check
@@ -153,9 +153,7 @@ function manageTaskPage() {
                                     Mulptiple tasks require you complete several sub-tasks before it is marked as completed.
                                     </Form.Text>
                             </Col>
-                            {/* <input type="radio" name="style" value="single" defaultChecked onClick={() => setStyleInput('single')} /><label htmlFor="single">Single</label>
-                        <input type="radio" name="style" value="multiple" onClick={() => setStyleInput('multiple')} /><label htmlFor="multiple">Multiple</label> */}
-                        </Form.Group>
+                        </Form.Group> */}
                         <h2>Task Design</h2>
                         <hr />
                         <br />
