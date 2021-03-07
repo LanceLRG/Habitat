@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import './Nav.css';
 import { useSelector } from 'react-redux';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 function Nav() {
@@ -26,24 +26,31 @@ function Nav() {
       </Link>
       <div>
         <Link className="navLink" to={loginLinkData.path}>
+          {(loginLinkData.text === 'Home') && <>
+          <FontAwesomeIcon icon={['fas', `list-ul`]} size="2x" />
+          <br />
+          </>
+          }
           {loginLinkData.text}
         </Link>
 
         {user.id && (
           <>
-            <Link className="navLink" to="/info">
+            {/* <Link className="navLink" to="/info">
               Info Page
-            </Link>
+            </Link> */}
             <Link className="navLink" to="/calendar">
+              <FontAwesomeIcon icon={['fas', `calendar`]} size="2x" />
+              <br />
               Calendar
             </Link>
             <LogOutButton className="navLink" />
           </>
         )}
 
-        <Link className="navLink" to="/about">
+        {/* <Link className="navLink" to="/about">
           About
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

@@ -34,9 +34,27 @@
     border: 2px solid;
 }
 
+.timer-button{
+    position: absolute;
+    right: 5rem;
+    cursor: pointer;
+}
+
+.timer-button:hover{
+    color:#1e699b;
+}
+
 .complete-button{
     border-color: black;
-    color: black;
+        color: black;
+}
+
+.complete-button:hover{
+    background-color: rgb(179, 247, 183);
+}
+
+.complete-button:active{
+    background-color: rgb(131, 199, 136);
 }
 
 .undo-button{
@@ -63,4 +81,32 @@
 .arrow-up{
     transform: rotate(180deg);
     transition: transform 1s linear;
+}
+
+#timer_display{
+    text-align: center;
+    font-size: 3rem;
+}
+
+.timerControl{
+    display: inline-block;
+    text-align: center;
+    margin: 30px;
+}
+
+.timer_control_container{
+    margin-left: 29%;
+}
+
+#timer_header{
+    text-align: center;
+    background-color: rgb(44, 148, 196);
+}
+
+#timer_icon:hover{
+    color:cadetblue;
+}
+
+#timer_icon:active{
+    transform: translateY(2px)
 }
