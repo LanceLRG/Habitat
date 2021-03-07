@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
+import Swal from 'sweetalert2';
+
 
 import './TaskManage.css';
 
@@ -95,7 +97,7 @@ function manageTaskPage() {
         else if (command === 'edit') {
             console.log('editing task', newTask);
             dispatch({ type: 'EDIT_TASK', payload: newTask })
-            dispatch({type: 'UNSET_EDIT'})
+            dispatch({ type: 'UNSET_EDIT' })
             history.push('/home')
         }
     }
@@ -188,7 +190,7 @@ function manageTaskPage() {
                             <div>
                                 <h3>Specifications</h3>
                                 <Form.Text className="text-muted">
-                                            Start off small, something you can't say 'no' to. You can always raise it later.
+                                    Start off small, something you can't say 'no' to. You can always raise it later.
                                     </Form.Text>
                                 <hr />
                                 <Form.Row>
@@ -201,12 +203,12 @@ function manageTaskPage() {
                                     </Col>
                                     <Col>
                                         <Form.Group controlId="formBasicCheckbox">
-                                            <Form.Check type="checkbox" label="Timer" checked={(timerToggle) ? true : false} onClick={() => setTimerToggle(!timerToggle)}/>
+                                            <Form.Check type="checkbox" label="Timer" checked={(timerToggle) ? true : false} onClick={() => setTimerToggle(!timerToggle)} />
                                             <InputGroup>
-                                            <Form.Control aria-describedby="basic-addon1" name="timer" type="number" disabled={(timerToggle) ? false : true} value={timerTime} onChange={(e) => setTimerTime(e.target.value)}/>
-                                            <InputGroup.Append>
-                                            <InputGroup.Text id="basic-addon1">Minutes</InputGroup.Text>
-                                            </InputGroup.Append>
+                                                <Form.Control aria-describedby="basic-addon1" name="timer" type="number" disabled={(timerToggle) ? false : true} value={timerTime} onChange={(e) => setTimerTime(e.target.value)} />
+                                                <InputGroup.Append>
+                                                    <InputGroup.Text id="basic-addon1">Minutes</InputGroup.Text>
+                                                </InputGroup.Append>
                                             </InputGroup>
                                             <Form.Text className="text-muted">
                                                 Tasks with a timer require the timer to run fully before being marked complete. If you'd prefer to manage your time less strictly, record it into the amount and unit fields and keep track of the time by some other means.
@@ -223,7 +225,7 @@ function manageTaskPage() {
                                     <Form.Control placeholder="ex: take medicine" disabled={(specialToggle) ? false : true} value={specialInput} onChange={(e) => setSpecialInput(e.target.value)} />
                                 </InputGroup>
                                 <Form.Text className="text-muted">
-                                            This is also a good place to specify <i>when</i> you'd like to do something, like "after work" or "on the bus".
+                                    This is also a good place to specify <i>when</i> you'd like to do something, like "after work" or "on the bus".
                                     </Form.Text>
                             </div>
                             <br />
@@ -235,7 +237,24 @@ function manageTaskPage() {
                                     {(store.edit.id) ? <Button block variant="primary" onClick={() => submitTask('edit')}>Submit Changes</Button> : <Button block variant="success" onClick={() => submitTask('add')}>Add Task</Button>}
                                 </Col>
                                 <Col md={{ span: 1, offset: 3 }}>
-                                    {(store.edit.id) ? <Button variant="danger" onClick={() => handleDelete(store.edit.id)}>Delete</Button> : ''}
+                                    {(store.edit.id) ? <Button variant="danger" onClick={() => Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            handleDelete(store.edit.id);
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'Your task has been deleted.',
+                                                'success'
+                                            )
+                                        }
+                                    })}> Delete</Button > : ''}
                                 </Col>
                             </Row>
                         </Form.Group>
@@ -245,5 +264,4 @@ function manageTaskPage() {
         </>
     );
 }
-
 export default manageTaskPage;

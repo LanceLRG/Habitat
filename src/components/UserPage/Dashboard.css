@@ -37,11 +37,24 @@
 .timer-button{
     position: absolute;
     right: 5rem;
+    cursor: pointer;
+}
+
+.timer-button:hover{
+    color:#1e699b;
 }
 
 .complete-button{
     border-color: black;
-    color: black;
+        color: black;
+}
+
+.complete-button:hover{
+    background-color: rgb(179, 247, 183);
+}
+
+.complete-button:active{
+    background-color: rgb(131, 199, 136);
 }
 
 .undo-button{

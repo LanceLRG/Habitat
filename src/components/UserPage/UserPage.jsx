@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -16,33 +17,26 @@ import Popover from 'react-bootstrap/Popover'
 import Accordion from 'react-bootstrap/Accordion'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-// import ModalDialog from 'react-bootstrap/ModalDialog'
-// import ModalHeader from 'react-bootstrap/ModalHeader'
-// import ModalTitle from 'react-bootstrap/ModalTitle'
-// import ModalBody from 'react-bootstrap/ModalBody'
-// import ModalFooter from 'react-bootstrap/ModalFooter'
-
-
 
 function UserPage() {
 
   const dispatch = useDispatch();
   const store = useSelector(store => store);
   const history = useHistory();
-  //const user = useSelector((store) => store.user);
 
-  // This task runs every time a 'complete' or 'undo' is made.
+
+  const [percent, setPercent] = useState(0);
+  const [myTime, setMytime] = useState('');
+  const [timerTaskName, setTimerTaskName] = useState('');
+  const [timerId, setTimerId] = useState('');
+
+  // This function runs every time a 'complete' or 'undo' is made.
   // It will check if the number of 'task-completes' is equal to the number of tasks 
   // inside the store. If it is (and the day isn't arleady marked 'complete'),
   // it will send a put request to mark the day (primary task) as 'complete'. 
   // If it isn't, it will check to see if an 'undo' was made after a day completion.
   // If the day is marked as 'complete' but there aren't enough 'task-completes'
   // it will set the day's completion back to false.
-  const [percent, setPercent] = useState(0);
-  const [myTime, setMytime] = useState('');
-  const [timerTaskName, setTimerTaskName] = useState('');
-  const [timerId, setTimerId] = useState('');
-
   const calcComplete = () => {
     let compCount = 0;
 
@@ -74,14 +68,7 @@ function UserPage() {
       dispatch({ type: 'RAISE_LONGEST_STREAK', payload: { newStreak: store.primaryTask.current_streak, userId: store.user.id } })
     }
   }
-
-  // const checkStreakBreak = () => {
-  //   today = new Date();
-  //   latestDay = store.primaryHistory[0].date
-  //   if ((moment(latestDay.setHours(0, 0, 0, 0)).format('l') === moment(today.setHours(0, 0, 0, 0)).format('l')) && !store.primaryHistory[1].complete){
-  //     dispatch({type: })
-  // }
-
+  
   const markComplete = (taskId) => {
     console.log('completing task with id:', taskId);
     dispatch({ type: 'COMPLETE_TASK', payload: { taskId: taskId, userId: store.user.id } })
@@ -249,7 +236,21 @@ function UserPage() {
                     <OverlayTrigger key="top" placement="top" delay={{ show: 200 }} overlay={<Tooltip id={'tooltip-top'}>edit</Tooltip>}>
                       <button className="edit-button" onClick={() => handleEdit(task.id)}><FontAwesomeIcon icon={['fas', 'pen']} size="1x" /></button>
                     </OverlayTrigger>
-                    {(task.tcomplete) ? <button className="btn-secondary undo-button" onClick={() => markUndo(task.id)}>Undo</button> : completer(task)}
+                    {(task.tcomplete) ? <button className="btn-secondary undo-button" onClick={() => Swal.fire({
+                      title: 'Are you sure?',
+                      text: "If your task is timer based it will have to countdown again!",
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yep, undo!'
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        markUndo(task.id)
+                    }
+                    })
+                  }
+                    >Undo</button> : completer(task)}
                     {(task.tcomplete) ? <FontAwesomeIcon id="completion" icon={['far', `check-circle`]} color="green" size="2x" /> : <FontAwesomeIcon id="completion" icon={['far', `circle`]} size="2x" />}
                   </Card.Header>
                   <Accordion.Collapse eventKey="0">
