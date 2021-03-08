@@ -22,8 +22,9 @@ function* fetchPrimary() {
             yield put({ type: 'ADD_PRIMARY', payload: { date: today.setHours(0, 0, 0, 0)}})
         }
         const record = new Date(response.data[0].date);
-        if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 8640000 || !response.data) {
-            if (response.data[0].complete === false || (today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 17280000){
+        if ((today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 86400000 || !response.data) {
+            console.log('comparing:', today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0));
+            if (response.data[0].complete === false || (today.setHours(0, 0, 0, 0) - record.setHours(0, 0, 0, 0)) >= 172800000){
                 console.log('breaking your streak!');
                 yield axios.put('/api/task/break')
             }
