@@ -104,6 +104,7 @@ function manageTaskPage() {
 
     const handleDelete = (taskId) => {
         dispatch({ type: 'DELETE_TASK', payload: taskId })
+        dispatch({ type: 'UNSET_EDIT' })
         history.push('/home')
     }
 
